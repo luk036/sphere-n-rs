@@ -48,14 +48,15 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 [[package]]
 name = "lds-rs"
 version = "0.1.0"
-source = "git+https://github.com/luk036/lds-rs#f833e4075129734b4aeeebb6ca9622703febc6bd"
+source = "git+https://github.com/luk036/lds-rs#3c58365e64885d9244433bc7f83fc5f87c716c6b"
 
 [[package]]
 name = "matrixmultiply"
-version = "0.3.2"
+version = "0.3.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "add85d4dd35074e6fedc608f8c8f513a3548619a9024b751949ef0e8e45a4d84"
+checksum = "090126dc04f95dc0d1c1c91f61bdd474b3930ca064c1edc8a849da2c6cbe1e77"
 dependencies = [
+ "autocfg",
  "rawpointer",
 ]
 

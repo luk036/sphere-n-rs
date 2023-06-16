@@ -9,14 +9,14 @@ mod tests {
     use approx_eq::assert_approx_eq;
 
     use lds_rs::lds::PRIME_TABLE;
-    use lds_rs::lds::{Circle, Halton, Sphere, Sphere3Hopf, Vdcorput};
+    use lds_rs::lds::{Circle, Halton, Sphere, Sphere3Hopf, VdCorput};
     use lds_rs::lds_n::HaltonN;
 
     #[test]
     fn it_works() {
         let base: [usize; 5] = [2, 3, 5, 7, 11];
 
-        let mut vgen = Vdcorput::new(2);
+        let mut vgen = VdCorput::new(2);
         vgen.reseed(10);
         for _i in 0..10 {
             println!("{}", vgen.pop());

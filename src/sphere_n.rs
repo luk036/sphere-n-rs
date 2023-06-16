@@ -1,4 +1,4 @@
-use lds_rs::lds::{Circle, Sphere, Vdcorput};
+use lds_rs::lds::{Circle, Sphere, VdCorput};
 use interp::interp;
 use lazy_static::lazy_static;
 use ndarray::Array1;
@@ -32,7 +32,7 @@ pub trait SphereGen {
 }
 
 pub struct Sphere3 {
-    vdc: Vdcorput,
+    vdc: VdCorput,
     sphere2: Sphere,
     tp: Array1<f64>,
 }
@@ -46,7 +46,7 @@ impl Sphere3 {
      */
     pub fn new(base: &[usize]) -> Self {
         Sphere3 {
-            vdc: Vdcorput::new(base[0]),
+            vdc: VdCorput::new(base[0]),
             sphere2: Sphere::new(&base[1..3]),
             // tp: 0.5 * (X.mapv(|x| x) - SINE.mapv(|x| x) + NEG_COSINE.mapv(|x| x)),
             tp: 0.5 * (&GL.x - &GL.sine * &GL.neg_cosine),
@@ -98,7 +98,7 @@ impl SphereGen for Sphere3 {
 
 /** Generate Sphere-3 Halton sequence */
 pub struct NSphere {
-    vdc: Vdcorput,
+    vdc: VdCorput,
     s_gen: Box<dyn SphereGen>,
     tp: Array1<f64>,
 }
@@ -118,7 +118,7 @@ impl NSphere {
             + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
             / n as f64;
         NSphere {
-            vdc: Vdcorput::new(base[0]),
+            vdc: VdCorput::new(base[0]),
             s_gen,
             tp,
         }
@@ -196,7 +196,7 @@ enum SphereVariant {
 /// assert_approx_eq!(res[0], 0.006903401092767657);
 /// ```
 pub struct SphereN {
-    vdc: Vdcorput,
+    vdc: VdCorput,
     s_gen: SphereVariant,
     tp: Array1<f64>,
 }
@@ -224,7 +224,7 @@ impl SphereN {
             / n as f64;
 
         SphereN {
-            vdc: Vdcorput::new(base[0]),
+            vdc: VdCorput::new(base[0]),
             s_gen,
             tp,
         }
@@ -276,7 +276,7 @@ enum CylinVariant {
 
 /// Generate N-Sphere using cylindrical coordinate method */
 pub struct CylinN {
-    vdc: Vdcorput,
+    vdc: VdCorput,
     c_gen: CylinVariant,
 }
 
@@ -306,7 +306,7 @@ impl CylinN {
             CylinVariant::ForN(Box::<CylinN>::new(CylinN::new(n - 1, &base[1..])))
         };
         CylinN {
-            vdc: Vdcorput::new(base[0]),
+            vdc: VdCorput::new(base[0]),
             c_gen,
         }
     }
@@ -361,7 +361,7 @@ impl Cylind for Circle {
 
 /** Generate using cylindrical coordinate method */
 pub struct CylindN {
-    vdc: Vdcorput,
+    vdc: VdCorput,
     c_gen: Box<dyn Cylind>,
 }
 
@@ -399,7 +399,7 @@ impl CylindN {
             Box::new(CylindN::new(n - 1, &base[1..]))
         };
         CylindN {
-            vdc: Vdcorput::new(base[0]),
+            vdc: VdCorput::new(base[0]),
             c_gen,
         }
     }

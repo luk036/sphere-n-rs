@@ -25,14 +25,14 @@ fn get_tp(n: i32) -> Vec<f64> {
 }
 
 struct Sphere3 {
-    vdc: Vdcorput,
+    vdc: VdCorput,
     sphere2: Sphere,
 }
 
 impl Sphere3 {
     fn new(base: &[i32]) -> Self {
         Self {
-            vdc: Vdcorput::new(base[0]),
+            vdc: VdCorput::new(base[0]),
             sphere2: Sphere::new(&base[1..3]),
         }
     }
@@ -47,7 +47,7 @@ impl Sphere3 {
 }
 
 struct SphereN {
-    vdc: Vdcorput,
+    vdc: VdCorput,
     s_gen: Box<dyn SphereTrait>,
     n: i32,
     range: f64,
@@ -57,7 +57,7 @@ impl SphereN {
     fn new(n: i32, base: &[i32]) -> Self {
         assert!(n >= 2);
         Self {
-            vdc: Vdcorput::new(base[0]),
+            vdc: VdCorput::new(base[0]),
             s_gen: if n == 2 {
                 Box::new(Sphere::new(&base[1..3]))
             } else {
@@ -120,13 +120,13 @@ impl SphereTrait for Sphere {
     }
 }
 
-struct Vdcorput {
+struct VdCorput {
     base: i32,
     vdc: i32,
     inv_base: f64,
 }
 
-impl Vdcorput {
+impl VdCorput {
     fn new(base: i32) -> Self {
         Self {
             base,
