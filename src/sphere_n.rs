@@ -1,6 +1,6 @@
-use lds_rs::lds::{Circle, Sphere, VdCorput};
 use interp::interp;
 use lazy_static::lazy_static;
+use lds_rs::lds::{Circle, Sphere, VdCorput};
 use ndarray::Array1;
 
 const PI: f64 = std::f64::consts::PI;
