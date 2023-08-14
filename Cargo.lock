@@ -48,7 +48,7 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 [[package]]
 name = "lds-rs"
 version = "0.1.0"
-source = "git+https://github.com/luk036/lds-rs#bece704353b703749224b73d66855d8dd1af84e9"
+source = "git+https://github.com/luk036/lds-rs#4b13fb7581795ba689421bca04621b87798c9789"
 
 [[package]]
 name = "matrixmultiply"
