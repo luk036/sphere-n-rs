@@ -11,7 +11,7 @@ license = "MIT OR Apache-2.0"
 [dependencies]
 ndarray = "0.15.4"
 lazy_static = "1.4.0"
-interp = "1.0.1"
+interp = "1.0.2"
 lds-rs = { git = "https://github.com/luk036/lds-rs" }
 
 [dev-dependencies]
