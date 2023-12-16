@@ -47,8 +47,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "lds-rs"
-version = "0.1.0"
-source = "git+https://github.com/luk036/lds-rs#4b13fb7581795ba689421bca04621b87798c9789"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "faa18020f24cc406ba3eb32016accda1b58c42827ae9720f65be90c2dd39684a"
 
 [[package]]
 name = "matrixmultiply"

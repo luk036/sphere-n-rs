@@ -12,7 +12,8 @@ license = "MIT OR Apache-2.0"
 ndarray = "0.15.4"
 lazy_static = "1.4.0"
 interp = "1.0.2"
-lds-rs = { git = "https://github.com/luk036/lds-rs" }
+lds-rs = "0.1.1"
+# lds-rs = { git = "https://github.com/luk036/lds-rs" }
 
 [dev-dependencies]
 approx_eq = "0.1.8"
