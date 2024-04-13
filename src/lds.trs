@@ -88,7 +88,6 @@ impl Halton {
     /**
      * @brief
      *
-     * @param seed
      */
     #[allow(dead_code)]
     pub fn reseed(&mut self, seed: usize) {
@@ -169,7 +168,6 @@ impl Sphere {
     /**
      * @brief
      *
-     * @param seed
      */
     #[allow(dead_code)]
     pub fn reseed(&mut self, seed: usize) {
