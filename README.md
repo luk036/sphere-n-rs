@@ -1,4 +1,4 @@
-# sphere-n-rs
+# 🏐 sphere-n-rs
 
 [![Crates.io](https://img.shields.io/crates/v/sphere-n-rs.svg)](https://crates.io/crates/sphere-n-rs)
 [![Docs.rs](https://docs.rs/sphere-n-rs/badge.svg)](https://docs.rs/sphere-n-rs)
