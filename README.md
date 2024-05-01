@@ -3,6 +3,7 @@
 [![Crates.io](https://img.shields.io/crates/v/sphere-n-rs.svg)](https://crates.io/crates/sphere-n-rs)
 [![Docs.rs](https://docs.rs/sphere-n-rs/badge.svg)](https://docs.rs/sphere-n-rs)
 [![CI](https://github.com/luk036/sphere-n-rs/workflows/CI/badge.svg)](https://github.com/luk036/sphere-n-rs/actions)
+[![codecov](https://codecov.io/gh/luk036/sphere-n-rs/graph/badge.svg?token=2naWVCVeCb)](https://codecov.io/gh/luk036/sphere-n-rs)
 
 Low Discrepancy Sequence for S_n in Rust
 
