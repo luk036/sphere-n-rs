@@ -2,8 +2,8 @@ use interp::interp;
 use lazy_static::lazy_static;
 use lds_rs::lds::{Circle, Sphere, VdCorput};
 use ndarray::Array1;
+use std::f64::consts::PI;
 
-const PI: f64 = std::f64::consts::PI;
 const HALF_PI: f64 = PI / 2.0;
 
 lazy_static! {
@@ -30,7 +30,7 @@ struct Gl {
 
 lazy_static! {
     static ref GL: Gl = Gl {
-        x: Array1::linspace(0.0, PI, 300),
+        x: X.clone(),
         neg_cosine: -X.mapv(f64::cos),
         sine: X.mapv(f64::sin),
     };
@@ -152,6 +152,7 @@ impl SphereGen for Sphere3 {
 pub struct NSphere {
     vdc: VdCorput,
     s_gen: Box<dyn SphereGen>,
+    n: u32,
     tp: Array1<f64>,
 }
 
@@ -169,7 +170,7 @@ impl NSphere {
     /// Returns:
     ///
     /// The `new` function returns an instance of the `NSphere` struct.
-    pub fn new(n: usize, base: &[usize]) -> Self {
+    pub fn new(n: u32, base: &[usize]) -> Self {
         assert!(n >= 3);
         let (s_gen, tp_minus2): (Box<dyn SphereGen>, Array1<f64>) = if n == 3 {
             (Box::new(Sphere3::new(&base[1..4])), GL.neg_cosine.clone())
@@ -184,6 +185,7 @@ impl NSphere {
         NSphere {
             vdc: VdCorput::new(base[0]),
             s_gen,
+            n,
             tp,
         }
     }

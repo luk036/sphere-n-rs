@@ -13,6 +13,9 @@ ndarray = "0.15.4"
 lazy_static = "1.4.0"
 interp = "1.0.3"
 lds-rs = "0.1.1"
+# nd-triangulation = "0.3.4"
+# nalgebra = "0.32.6"
+# convex_hull = "0.2.3"
 # lds-rs = { git = "https://github.com/luk036/lds-rs" }
 
 [dev-dependencies]
