@@ -3,11 +3,18 @@ use lazy_static::lazy_static;
 use lds_rs::lds::{Circle, Sphere, VdCorput};
 use ndarray::Array1;
 use std::f64::consts::PI;
+use std::sync::Mutex;
+use std::collections::HashMap;
 
 const HALF_PI: f64 = PI / 2.0;
 
 lazy_static! {
     static ref X: Array1<f64> = Array1::linspace(0.0, PI, 300);
+}
+
+lazy_static! {
+    static ref CACHE_ODD: Mutex<HashMap<usize, Array1<f64>>> = Mutex::new(HashMap::new());
+    static ref CACHE_EVEN: Mutex<HashMap<usize, Array1<f64>>> = Mutex::new(HashMap::new());
 }
 
 /// The struct `Gl` in Rust contains three arrays of type `f64` representing `x`, `neg_cosine`, and
@@ -34,6 +41,52 @@ lazy_static! {
         neg_cosine: -X.mapv(f64::cos),
         sine: X.mapv(f64::sin),
     };
+}
+
+fn get_tp_odd(n: usize) -> Array1<f64> {
+    let mut cache_odd = CACHE_ODD.lock().unwrap();
+    if let Some(result) = cache_odd.get(&n) {
+        return result.clone();
+    }
+
+    let result = if n == 1 {
+        GL.neg_cosine.clone() // Adjusted to call static method, assuming its existence
+    } else {
+        let tp_minus_2 = get_tp_odd(n - 2);
+        let tp = (((n - 1) as f64) * &tp_minus_2 + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
+            / (n as f64);
+        tp
+    };
+
+    cache_odd.insert(n, result);
+    cache_odd.get(&n).unwrap().clone()
+}
+
+fn get_tp_even(n: usize) -> Array1<f64> {
+    let mut cache_even = CACHE_EVEN.lock().unwrap();
+    if let Some(result) = cache_even.get(&n) {
+        return result.clone();
+    }
+
+    let result = if n == 0 {
+        GL.x.clone() // Adjusted to call static method, assuming its existence
+    } else {
+        let tp_minus_2 = get_tp_even(n - 2);
+        let tp = (((n - 1) as f64) * &tp_minus_2 + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
+            / (n as f64);
+        tp
+    };
+
+    cache_even.insert(n, result);
+    cache_even.get(&n).unwrap().clone()
+}
+
+fn get_tp(n: usize) -> Array1<f64> {
+    if n % 2 == 0 {
+        get_tp_even(n)
+    } else {
+        get_tp_odd(n)
+    }
 }
 
 /// The `SphereGen` trait in Rust defines a set of methods that need to be implemented by types that

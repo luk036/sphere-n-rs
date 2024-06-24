@@ -1,4 +1,3 @@
-pub mod lds_n;
 pub mod sphere_n;
 
 pub use crate::sphere_n::{CylinN, CylindN, NSphere, Sphere3, SphereN};
