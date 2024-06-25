@@ -3,8 +3,9 @@ use lazy_static::lazy_static;
 use lds_rs::lds::{Circle, Sphere, VdCorput};
 use ndarray::Array1;
 use std::f64::consts::PI;
-use std::sync::Mutex;
-use std::collections::HashMap;
+// use std::sync::{Mutex, MutexGuard};
+// use std::collections::HashMap;
+use cached::proc_macro::cached;
 
 const HALF_PI: f64 = PI / 2.0;
 
@@ -12,10 +13,10 @@ lazy_static! {
     static ref X: Array1<f64> = Array1::linspace(0.0, PI, 300);
 }
 
-lazy_static! {
-    static ref CACHE_ODD: Mutex<HashMap<usize, Array1<f64>>> = Mutex::new(HashMap::new());
-    static ref CACHE_EVEN: Mutex<HashMap<usize, Array1<f64>>> = Mutex::new(HashMap::new());
-}
+// lazy_static! {
+//     static ref CACHE_ODD: Mutex<HashMap<usize, Array1<f64>>> = Mutex::new(HashMap::new());
+//     static ref CACHE_EVEN: Mutex<HashMap<usize, Array1<f64>>> = Mutex::new(HashMap::new());
+// }
 
 /// The struct `Gl` in Rust contains three arrays of type `f64` representing `x`, `neg_cosine`, and
 /// `sine`.
@@ -43,45 +44,31 @@ lazy_static! {
     };
 }
 
-fn get_tp_odd(n: usize) -> Array1<f64> {
-    let mut cache_odd = CACHE_ODD.lock().unwrap();
-    if let Some(result) = cache_odd.get(&n) {
-        return result.clone();
-    }
-
-    let result = if n == 1 {
+#[cached]
+fn get_tp_odd(n: u32) -> Array1<f64> {
+    if n == 1 {
         GL.neg_cosine.clone() // Adjusted to call static method, assuming its existence
     } else {
         let tp_minus_2 = get_tp_odd(n - 2);
         let tp = (((n - 1) as f64) * &tp_minus_2 + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
             / (n as f64);
         tp
-    };
-
-    cache_odd.insert(n, result);
-    cache_odd.get(&n).unwrap().clone()
+    }    
 }
 
-fn get_tp_even(n: usize) -> Array1<f64> {
-    let mut cache_even = CACHE_EVEN.lock().unwrap();
-    if let Some(result) = cache_even.get(&n) {
-        return result.clone();
-    }
-
-    let result = if n == 0 {
+#[cached]
+fn get_tp_even(n: u32) -> Array1<f64> {
+    if n == 0 {
         GL.x.clone() // Adjusted to call static method, assuming its existence
     } else {
         let tp_minus_2 = get_tp_even(n - 2);
         let tp = (((n - 1) as f64) * &tp_minus_2 + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
             / (n as f64);
         tp
-    };
-
-    cache_even.insert(n, result);
-    cache_even.get(&n).unwrap().clone()
+    }
 }
 
-fn get_tp(n: usize) -> Array1<f64> {
+fn get_tp(n: u32) -> Array1<f64> {
     if n % 2 == 0 {
         get_tp_even(n)
     } else {
@@ -131,7 +118,7 @@ impl Sphere3 {
             vdc: VdCorput::new(base[0]),
             sphere2: Sphere::new(&base[1..3]),
             // tp: 0.5 * (X.mapv(|x| x) - SINE.mapv(|x| x) + NEG_COSINE.mapv(|x| x)),
-            tp: 0.5 * (&GL.x - &GL.sine * &GL.neg_cosine),
+            tp: 0.5 * (&GL.x + &GL.sine * &GL.neg_cosine),
         }
     }
 
@@ -145,7 +132,7 @@ impl Sphere3 {
     /// `[sinxi * s0, sinxi * s1, sinxi * s
     pub fn pop(&mut self) -> [f64; 4] {
         let ti = HALF_PI * self.vdc.pop(); // map to [0, pi/2];
-        let xi = interp(&self.tp.to_vec(), &X.to_vec(), ti);
+        let xi = interp(&get_tp(2).to_vec(), &X.to_vec(), ti);
         let cosxi = xi.cos();
         let sinxi = xi.sin();
         let [s0, s1, s2] = self.sphere2.pop();
@@ -288,8 +275,9 @@ impl SphereGen for NSphere {
 
     fn pop_vec(&mut self) -> Vec<f64> {
         let vd = self.vdc.pop();
-        let ti = self.tp[0] + (self.tp[self.tp.len() - 1] - self.tp[0]) * vd; // map to [t0, tm-1];
-        let xi = interp(&self.tp.to_vec(), &X.to_vec(), ti);
+        let tp = get_tp(self.n);
+        let ti = tp[0] + (tp[tp.len() - 1] - tp[0]) * vd; // map to [t0, tm-1];
+        let xi = interp(&tp.to_vec(), &X.to_vec(), ti);
         let sinphi = xi.sin();
         let mut res = self.s_gen.pop_vec();
         for xi in res.iter_mut() {
