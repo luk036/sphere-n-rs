@@ -50,10 +50,10 @@ fn get_tp_odd(n: u32) -> Array1<f64> {
         GL.neg_cosine.clone() // Adjusted to call static method, assuming its existence
     } else {
         let tp_minus_2 = get_tp_odd(n - 2);
-        let tp = (((n - 1) as f64) * &tp_minus_2
+        
+        (((n - 1) as f64) * &tp_minus_2
             + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
-            / (n as f64);
-        tp
+            / (n as f64)
     }
 }
 
@@ -63,10 +63,10 @@ fn get_tp_even(n: u32) -> Array1<f64> {
         GL.x.clone() // Adjusted to call static method, assuming its existence
     } else {
         let tp_minus_2 = get_tp_even(n - 2);
-        let tp = (((n - 1) as f64) * &tp_minus_2
+        
+        (((n - 1) as f64) * &tp_minus_2
             + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
-            / (n as f64);
-        tp
+            / (n as f64)
     }
 }
 
