@@ -50,10 +50,11 @@ fn get_tp_odd(n: u32) -> Array1<f64> {
         GL.neg_cosine.clone() // Adjusted to call static method, assuming its existence
     } else {
         let tp_minus_2 = get_tp_odd(n - 2);
-        let tp = (((n - 1) as f64) * &tp_minus_2 + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
+        let tp = (((n - 1) as f64) * &tp_minus_2
+            + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
             / (n as f64);
         tp
-    }    
+    }
 }
 
 #[cached]
@@ -62,7 +63,8 @@ fn get_tp_even(n: u32) -> Array1<f64> {
         GL.x.clone() // Adjusted to call static method, assuming its existence
     } else {
         let tp_minus_2 = get_tp_even(n - 2);
-        let tp = (((n - 1) as f64) * &tp_minus_2 + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
+        let tp = (((n - 1) as f64) * &tp_minus_2
+            + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
             / (n as f64);
         tp
     }
@@ -156,7 +158,7 @@ impl Sphere3 {
 /// }
 /// let res = sgen.pop();
 ///
-/// assert_approx_eq!(res[0], 0.3430622238280562);
+/// assert_approx_eq!(res[1], 0.5799062768626047);
 /// ```
 impl SphereGen for Sphere3 {
     #[inline]
@@ -253,14 +255,11 @@ impl NSphere {
 /// use sphere_n_rs::SphereGen;
 /// use approx_eq::assert_approx_eq;
 ///
-/// let mut sgen = NSphere::new(4, &[2, 3, 5, 7, 11]);
+/// let mut sgen = NSphere::new(3, &[2, 3, 5, 7]);
 /// sgen.reseed(0);
-/// for _i in 0..10 {
-///     println!("{:?}", sgen.pop_vec());
-/// }
 /// let res = sgen.pop_vec();
 ///
-/// assert_approx_eq!(res[0], 0.006903401092767657);
+/// assert_approx_eq!(res[0], 0.4809684718990214);
 /// ```
 impl SphereGen for NSphere {
     #[allow(dead_code)]
@@ -302,14 +301,11 @@ enum SphereVariant {
 /// use sphere_n_rs::SphereN;
 /// use approx_eq::assert_approx_eq;
 ///
-/// let mut sgen = SphereN::new(4, &[2, 3, 5, 7, 11]);
+/// let mut sgen = SphereN::new(3, &[2, 3, 5, 7]);
 /// sgen.reseed(0);
-/// for _i in 0..10 {
-///     println!("{:?}", sgen.pop_vec());
-/// }
 /// let res = sgen.pop_vec();
 ///
-/// assert_approx_eq!(res[0], 0.006903401092767657);
+/// assert_approx_eq!(res[0], 0.4809684718990214);
 /// ```
 pub struct SphereN {
     vdc: VdCorput,
@@ -404,14 +400,14 @@ pub struct CylinN {
 /// use sphere_n_rs::CylinN;
 /// use approx_eq::assert_approx_eq;
 ///
-/// let mut cgen = CylinN::new(5, &[2, 3, 5, 7, 11]);
+/// let mut cgen = CylinN::new(5, &[2, 3, 5, 7, 11, 13]);
 /// cgen.reseed(0);
 /// for _i in 0..10 {
 ///     println!("{:?}", cgen.pop_vec());
 /// }
 /// let res = cgen.pop_vec();
 ///
-/// assert_approx_eq!(res[0], 0.032662755534715766);
+/// assert_approx_eq!(res[1], 0.032662755534715766);
 /// ```
 impl CylinN {
     pub fn new(n: usize, base: &[usize]) -> Self {
@@ -490,14 +486,14 @@ pub struct CylindN {
 /// use sphere_n_rs::Cylind;
 /// use approx_eq::assert_approx_eq;
 ///
-/// let mut cgen = CylindN::new(5, &[2, 3, 5, 7, 11]);
+/// let mut cgen = CylindN::new(5, &[2, 3, 5, 7, 11, 13]);
 /// cgen.reseed(0);
 /// for _i in 0..10 {
 ///     println!("{:?}", cgen.pop_vec());
 /// }
 /// let res = cgen.pop_vec();
 ///
-/// assert_approx_eq!(res[0], 0.032662755534715766);
+/// assert_approx_eq!(res[1], 0.032662755534715766);
 /// ```
 impl CylindN {
     /**

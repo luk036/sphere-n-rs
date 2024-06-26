@@ -170,9 +170,9 @@ checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
 
 [[package]]
 name = "lds-rs"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "faa18020f24cc406ba3eb32016accda1b58c42827ae9720f65be90c2dd39684a"
+checksum = "e90f6e7af63f1158f647d81a5e814b375b8468de6640fb5e70db43cc39bc0e27"
 
 [[package]]
 name = "matrixmultiply"
@@ -257,7 +257,7 @@ checksum = "60a357793950651c4ed0f3f52338f53b2f809f32d83a07f72909fa13e4c6c1e3"
 
 [[package]]
 name = "sphere-n-rs"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "approx_eq",
  "cached",
