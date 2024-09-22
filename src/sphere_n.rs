@@ -88,7 +88,7 @@ pub trait SphereGen {
     fn get_tp(&self) -> &Array1<f64>;
 }
 
-/// The `Sphere3` struct in Rust contains fields for VdCorput, Sphere, and an Array1<f64>.
+/// The `Sphere3` struct in Rust contains fields for VdCorput, Sphere, and an `Array1<f64>`.
 ///
 /// Properties:
 ///
@@ -232,7 +232,7 @@ impl NSphere {
         }
     }
 
-    /// The function `get_tp_minus1` returns a reference to an Array1<f64> obtained from calling the
+    /// The function `get_tp_minus1` returns a reference to an `Array1<f64>` obtained from calling the
     /// `get_tp` method on the `s_gen` field.
     ///
     /// Returns:
@@ -426,7 +426,7 @@ impl CylinN {
     /**
      * @brief
      *
-     * @return Vec<f64>
+     * @return `Vec<f64>`
      */
     pub fn pop_vec(&mut self) -> Vec<f64> {
         let cosphi = 2.0 * self.vdc.pop() - 1.0; // map to [-1, 1];
