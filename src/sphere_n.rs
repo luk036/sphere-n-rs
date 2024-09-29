@@ -142,7 +142,7 @@ impl Sphere3 {
     }
 }
 
-/// Generate Sphere-3 Halton sequence
+/// Generate Sphere-3 Low-discrepency sequence
 ///
 /// # Examples
 ///
@@ -178,12 +178,12 @@ impl SphereGen for Sphere3 {
     }
 }
 
-/// The `NSphere` struct represents a generator for Sphere-N Halton sequence.
+/// The `NSphere` struct represents a generator for Sphere-N Low-discrepency sequence.
 ///
 /// Properties:
 ///
 /// * `vdc`: The `vdc` property seems to be of type `VdCorput`, which is likely used for generating
-/// Halton sequences. Halton sequences are deterministic sequences that are used for quasi-random
+/// Low-discrepency sequences. Low-discrepency sequences are deterministic sequences that are used for quasi-random
 /// sampling. The `VdCorput` struct probably implements the Van der Corput sequence generation
 /// algorithm.
 /// * `s_gen`: The `s_gen` property in the `NSphere` struct is a Box containing a trait object that
@@ -246,7 +246,7 @@ impl NSphere {
     }
 }
 
-/// Generate N-Sphere Halton sequence
+/// Generate N-Sphere Low-discrepency sequence
 ///
 /// # Examples
 ///
@@ -293,7 +293,7 @@ enum SphereVariant {
     ForSn(Box<SphereN>),
 }
 
-/// Generate N-Sphere Halton sequence
+/// Generate N-Sphere Low-discrepency sequence
 ///
 /// # Examples
 ///
