@@ -1,13 +1,13 @@
-pub mod sphere_n;
 pub mod cylind_n;
+pub mod sphere_n;
 
-pub use crate::sphere_n::{NSphere, Sphere3, SphereN, SphereGen};
-pub use crate::cylind_n::{NCylind, CylindN, CylindGen};
+pub use crate::cylind_n::{CylindGen, CylindN, NCylind};
+pub use crate::sphere_n::{NSphere, Sphere3, SphereGen, SphereN};
 
 #[cfg(test)]
 mod tests {
-    use super::sphere_n::*;
     use super::cylind_n::*;
+    use super::sphere_n::*;
     use approx_eq::assert_approx_eq;
 
     use lds_rs::lds::PRIME_TABLE;
