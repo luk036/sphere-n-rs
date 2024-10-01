@@ -2,7 +2,7 @@ extern crate convex_hull;
 extern crate nalgebra;
 use assert_approx_eq::assert_approx_eq;
 use nalgebra::{Point3, Vector3};
-use sphere_n::{CylinN, SphereN};
+use sphere_n::{CylindN, SphereN};
 use std::f64::consts::PI; // Assuming sphere_n crate is available
 
 fn discrep_2<K: AsRef<[usize]>>(k_indices: &[K], points: &[Vector3<f64>]) -> f64 {
@@ -47,7 +47,7 @@ fn test_sphere_n() {
 
 #[test]
 fn test_cylin_n() {
-    let mut cygen = CylinN::new(vec![2, 3, 5, 7]);
+    let mut cygen = CylindN::new(vec![2, 3, 5, 7]);
     let measure = run_lds(&mut cygen);
     assert_approx_eq!(measure, 1.0505837105828988, 1e-6);
 }

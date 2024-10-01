@@ -1,8 +1,8 @@
 use approx_eq::assert_approx_eq;
 use lds_rs::lds::PRIME_TABLE;
 use lds_rs::lds::{Circle, Halton, Sphere, Sphere3Hopf, VdCorput};
-use lds_rs::lds_n::{CylinN, CylindN, HaltonN, NSphere, Sphere3, SphereN};
-use lds_rs::lds_n::{Cylind, SphereGen}; // Traits
+use lds_rs::lds_n::{CylindN, CylindN, HaltonN, NSphere, Sphere3, SphereN};
+use lds_rs::lds_n::{CylindGen, SphereGen}; // Traits
 
 fn main() {
     let base: [usize; 5] = [2, 3, 5, 7, 11];
@@ -63,7 +63,7 @@ fn main() {
     let res = hgen.pop_vec();
     assert_approx_eq!(res[0], 0.65625);
 
-    let mut cgen = CylinN::new(5, &PRIME_TABLE);
+    let mut cgen = CylindN::new(5, &PRIME_TABLE);
     cgen.reseed(0);
     for _i in 0..10 {
         println!("{:?}", cgen.pop_vec());

@@ -1,11 +1,13 @@
 pub mod sphere_n;
+pub mod cylind_n;
 
-pub use crate::sphere_n::{CylinN, CylindN, NSphere, Sphere3, SphereN};
-pub use crate::sphere_n::{Cylind, SphereGen}; // Traits
+pub use crate::sphere_n::{NSphere, Sphere3, SphereN, SphereGen};
+pub use crate::cylind_n::{NCylind, CylindN, CylindGen};
 
 #[cfg(test)]
 mod tests {
     use super::sphere_n::*;
+    use super::cylind_n::*;
     use approx_eq::assert_approx_eq;
 
     use lds_rs::lds::PRIME_TABLE;
@@ -25,7 +27,7 @@ mod tests {
 
     #[test]
     fn test_cylin_n() {
-        let mut cgen = CylinN::new(5, &PRIME_TABLE);
+        let mut cgen = CylindN::new(5, &PRIME_TABLE);
         cgen.reseed(0);
         for _i in 0..10 {
             println!("{:?}", cgen.pop_vec());

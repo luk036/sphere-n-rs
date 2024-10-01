@@ -6,13 +6,13 @@ use ndarray::Array1;
 const PI: f64 = std::f64::consts::PI;
 const HALF_PI: f64 = PI / 2.0;
 
-pub trait Cylind {
+pub trait CylindGen {
     // fn new(base: &[usize]) -> Self;
     fn pop_vec(&mut self) -> Vec<f64>;
     fn reseed(&mut self, seed: usize);
 }
 
-impl Cylind for Circle {
+impl CylindGen for Circle {
     fn pop_vec(&mut self) -> Vec<f64> {
         self.pop().to_vec()
     }
@@ -25,14 +25,14 @@ impl Cylind for Circle {
 /** Generate using cylindrical coordinate method */
 pub struct CylindN {
     vdc: VdCorput,
-    c_gen: Box<dyn Cylind>,
+    c_gen: Box<dyn CylindGen>,
 }
 
 impl CylindN {
     #[allow(dead_code)]
     pub fn new(n: usize, base: &[usize]) -> Self {
         assert!(n >= 2);
-        let c_gen: Box<dyn Cylind> = if n == 2 {
+        let c_gen: Box<dyn CylindGen> = if n == 2 {
             Box::new(Circle::new(base[1]))
         } else {
             Box::new(CylindN::new(n - 1, &base[1..]))
@@ -44,7 +44,7 @@ impl CylindN {
     }
 }
 
-impl Cylind for CylindN {
+impl CylindGen for CylindN {
     fn pop_vec(&mut self) -> Vec<f64> {
         let cosphi = 2.0 * self.vdc.pop() - 1.0; // map to [-1, 1];
         let sinphi = (1.0 - cosphi * cosphi).sqrt();
