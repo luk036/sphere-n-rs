@@ -5,7 +5,6 @@ use ndarray::{Array1, Array};
 use std::f64;
 use std::sync::Arc;
 
-const HALF_PI: f64 = PI / 2.0;
 const X: Array1<f64> = Array::linspace(0.0, PI, 300);
 const NEG_COSINE: Array1<f64> = Array::from_iter(X.iter().map(|&x| -x.cos()));
 const SINE: Array1<f64> = Array::from_iter(X.iter().map(|&x| x.sin()));
@@ -57,7 +56,7 @@ impl Sphere3 {
 
 impl SphereGen for Sphere3 {
     fn pop(&mut self) -> Vec<f64> {
-        let ti = HALF_PI * self.vdc.pop();
+        let ti = PI * self.vdc.pop();
         let xi = interp(ti, &get_tp_even(2), &X);
         let cosxi = xi.cos();
         let sinxi = xi.sin();

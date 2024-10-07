@@ -32,6 +32,7 @@ struct Gl {
     x: Array1<f64>,
     neg_cosine: Array1<f64>,
     sine: Array1<f64>,
+    f2: Array1<f64>,
 }
 
 lazy_static! {
@@ -39,6 +40,7 @@ lazy_static! {
         x: X.clone(),
         neg_cosine: -X.mapv(f64::cos),
         sine: X.mapv(f64::sin),
+        f2: X.mapv(|x| (x - x.cos() * x.sin()) / 2.0),
     };
 }
 
@@ -132,7 +134,7 @@ impl Sphere3 {
     /// `[sinxi * s0, sinxi * s1, sinxi * s
     pub fn pop(&mut self) -> [f64; 4] {
         let ti = PI * self.vdc.pop(); // map to [0, pi];
-        let xi = interp(&get_tp(2).to_vec(), &X.to_vec(), ti);
+        let xi = interp(&GL.f2.to_vec(), &X.to_vec(), ti);
         let cosxi = xi.cos();
         let sinxi = xi.sin();
         let [s0, s1, s2] = self.sphere2.pop();

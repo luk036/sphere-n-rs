@@ -10,7 +10,6 @@ lazy_static! {
     static ref CACHE_EVEN: Mutex<HashMap<i32, Vec<f64>>> = Mutex::new(HashMap::new());
 }
 
-const HALF_PI: f64 = PI / 2.0;
 const N_POINTS: usize = 300;
 
 pub struct Globals {

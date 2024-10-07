@@ -4,7 +4,6 @@ use lds_rs::lds::{Circle, Sphere, VdCorput};
 use ndarray::Array1;
 
 const PI: f64 = std::f64::consts::PI;
-const HALF_PI: f64 = PI / 2.0;
 
 pub trait CylindGen {
     // fn new(base: &[usize]) -> Self;
