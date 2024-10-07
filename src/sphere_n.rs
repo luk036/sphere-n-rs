@@ -7,8 +7,6 @@ use std::f64::consts::PI;
 // use std::collections::HashMap;
 use cached::proc_macro::cached;
 
-const HALF_PI: f64 = PI / 2.0;
-
 lazy_static! {
     static ref X: Array1<f64> = Array1::linspace(0.0, PI, 300);
 }
@@ -133,7 +131,7 @@ impl Sphere3 {
     /// last value is the cosine of the interpolated value `xi`. The array returned contains the values
     /// `[sinxi * s0, sinxi * s1, sinxi * s
     pub fn pop(&mut self) -> [f64; 4] {
-        let ti = HALF_PI * self.vdc.pop(); // map to [0, pi/2];
+        let ti = PI * self.vdc.pop(); // map to [0, pi];
         let xi = interp(&get_tp(2).to_vec(), &X.to_vec(), ti);
         let cosxi = xi.cos();
         let sinxi = xi.sin();
@@ -158,7 +156,7 @@ impl Sphere3 {
 /// }
 /// let res = sgen.pop();
 ///
-/// assert_approx_eq!(res[1], 0.5799062768626047);
+/// assert_approx_eq!(res[1], -0.24135188409032363);
 /// ```
 impl SphereGen for Sphere3 {
     #[inline]

@@ -22,7 +22,7 @@ mod tests {
             println!("{:?}", sgen.pop());
         }
         let res = sgen.pop();
-        assert_approx_eq!(res[1], 0.5799062768626047);
+        assert_approx_eq!(res[1], -0.24135188409032363);
     }
 
     #[test]
