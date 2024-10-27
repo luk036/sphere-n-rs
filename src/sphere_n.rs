@@ -3,6 +3,7 @@ use lazy_static::lazy_static;
 use lds_rs::lds::{Sphere, VdCorput};
 use ndarray::Array1;
 use std::f64::consts::PI;
+use std::f64::consts::FRAC_PI_2; // Half of PI
 // use std::sync::{Mutex, MutexGuard};
 // use std::collections::HashMap;
 use cached::proc_macro::cached;
@@ -133,7 +134,7 @@ impl Sphere3 {
     /// last value is the cosine of the interpolated value `xi`. The array returned contains the values
     /// `[sinxi * s0, sinxi * s1, sinxi * s
     pub fn pop(&mut self) -> [f64; 4] {
-        let ti = PI * self.vdc.pop(); // map to [0, pi];
+        let ti = FRAC_PI_2 * self.vdc.pop(); // map to [0, pi];
         let xi = interp(&GL.f2.to_vec(), &X.to_vec(), ti);
         let cosxi = xi.cos();
         let sinxi = xi.sin();
@@ -158,7 +159,7 @@ impl Sphere3 {
 /// }
 /// let res = sgen.pop();
 ///
-/// assert_approx_eq!(res[1], -0.24135188409032363);
+/// assert_approx_eq!(res[1], 0.5799062768626047);
 /// ```
 impl SphereGen for Sphere3 {
     #[inline]
