@@ -2,10 +2,10 @@ use interp::interp;
 use lazy_static::lazy_static;
 use lds_rs::lds::{Sphere, VdCorput};
 use ndarray::Array1;
-use std::f64::consts::PI;
-use std::f64::consts::FRAC_PI_2; // Half of PI
-// use std::sync::{Mutex, MutexGuard};
-// use std::collections::HashMap;
+use std::f64::consts::FRAC_PI_2;
+use std::f64::consts::PI; // Half of PI
+                          // use std::sync::{Mutex, MutexGuard};
+                          // use std::collections::HashMap;
 use cached::proc_macro::cached;
 
 lazy_static! {
