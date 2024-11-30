@@ -23,12 +23,12 @@ lazy_static! {
 /// Properties:
 ///
 /// * `x`: The `x` property in the `Gl` struct appears to be an array of floating-point numbers (`f64`).
-/// It seems to represent some kind of data related to the struct.
+///         It seems to represent some kind of data related to the struct.
 /// * `neg_cosine`: The `neg_cosine` property in the `Gl` struct seems to be an array of floating-point
-/// numbers (`f64`). It likely stores the negative cosine values for some calculations or processing
-/// within the struct.
+///         numbers (`f64`). It likely stores the negative cosine values for some calculations or processing
+///         within the struct.
 /// * `sine`: The `sine` property in the `Gl` struct is an `Array1<f64>` type, which likely represents
-/// an array of floating-point numbers (f64) storing the sine values.
+///         an array of floating-point numbers (f64) storing the sine values.
 struct Gl {
     x: Array1<f64>,
     neg_cosine: Array1<f64>,
@@ -95,9 +95,9 @@ pub trait SphereGen {
 ///
 /// * `vdc`: The `vdc` property in the `Sphere3` struct is of type `VdCorput`.
 /// * `sphere2`: The `sphere2` property in the `Sphere3` struct is of type `Sphere`. It seems to be a
-/// reference to another struct named `Sphere`.
+///         reference to another struct named `Sphere`.
 /// * `tp`: The `tp` property in the `Sphere3` struct is of type `Array1<f64>`, which is an array of
-/// floating-point numbers with one dimension.
+///         floating-point numbers with one dimension.
 pub struct Sphere3 {
     vdc: VdCorput,
     sphere2: Sphere,
@@ -110,8 +110,8 @@ impl Sphere3 {
     /// Arguments:
     ///
     /// * `base`: The `base` parameter is an array of `usize` values that contains information needed to
-    /// initialize a `Sphere3` object. It is used to create a new `Sphere3` object by passing specific
-    /// values to initialize its internal components such as `VdCorput` and `Sphere`.
+    ///           initialize a `Sphere3` object. It is used to create a new `Sphere3` object by passing specific
+    ///           values to initialize its internal components such as `VdCorput` and `Sphere`.
     ///
     /// Returns:
     ///
@@ -184,14 +184,13 @@ impl SphereGen for Sphere3 {
 /// Properties:
 ///
 /// * `vdc`: The `vdc` property seems to be of type `VdCorput`, which is likely used for generating
-/// Low-discrepency sequences. Low-discrepency sequences are deterministic sequences that are used for quasi-random
-/// sampling. The `VdCorput` struct probably implements the Van der Corput sequence generation
-/// algorithm.
+///         Low-discrepency sequences. Low-discrepency sequences are deterministic sequences that are used for quasi-random
+///         sampling. The `VdCorput` struct probably implements the Van der Corput sequence generation algorithm.
 /// * `s_gen`: The `s_gen` property in the `NSphere` struct is a Box containing a trait object that
-/// implements the `SphereGen` trait. This allows for dynamic dispatch and the ability to store
-/// different types that implement the `SphereGen` trait in the `NSphere` struct.
+///         implements the `SphereGen` trait. This allows for dynamic dispatch and the ability to store
+///         different types that implement the `SphereGen` trait in the `NSphere` struct.
 /// * `tp`: The `tp` property in the `NSphere` struct is of type `Array1<f64>`. It is used to store some
-/// data related to the sphere generation process.
+///         data related to the sphere generation process.
 pub struct NSphere {
     vdc: VdCorput,
     s_gen: Box<dyn SphereGen>,
@@ -207,8 +206,8 @@ impl NSphere {
     ///
     /// * `n`: The parameter `n` represents the dimensionality of the sphere being generated.
     /// * `base`: The `base` parameter is a slice of `usize` values that contains the base values used
-    /// for generating the NSphere. The function `new` takes two parameters: `n`, which is the dimension
-    /// of the NSphere, and `base`, which is a slice containing the base values needed for
+    ///         for generating the NSphere. The function `new` takes two parameters: `n`, which is the dimension
+    ///         of the NSphere, and `base`, which is a slice containing the base values needed for
     ///
     /// Returns:
     ///
