@@ -1,4 +1,4 @@
-use interp::interp;
+use interp::{interp, InterpMode};
 use lazy_static::lazy_static;
 use lds_rs::lds::{Sphere, VdCorput};
 use ndarray::Array1;
@@ -135,7 +135,7 @@ impl Sphere3 {
     /// `[sinxi * s0, sinxi * s1, sinxi * s
     pub fn pop(&mut self) -> [f64; 4] {
         let ti = FRAC_PI_2 * self.vdc.pop(); // map to [0, pi];
-        let xi = interp(&GL.f2.to_vec(), &X.to_vec(), ti);
+        let xi = interp(&GL.f2.to_vec(), &X.to_vec(), ti, &InterpMode::default());
         let cosxi = xi.cos();
         let sinxi = xi.sin();
         let [s0, s1, s2] = self.sphere2.pop();
@@ -276,7 +276,7 @@ impl SphereGen for NSphere {
         let vd = self.vdc.pop();
         let tp = get_tp(self.n);
         let ti = tp[0] + (tp[tp.len() - 1] - tp[0]) * vd; // map to [t0, tm-1];
-        let xi = interp(&tp.to_vec(), &X.to_vec(), ti);
+        let xi = interp(&tp.to_vec(), &X.to_vec(), ti, &InterpMode::default());
         let sinphi = xi.sin();
         let mut res = self.s_gen.pop_vec();
         for xi in res.iter_mut() {
@@ -357,7 +357,7 @@ impl SphereN {
     pub fn pop_vec(&mut self) -> Vec<f64> {
         let vd = self.vdc.pop();
         let ti = self.tp[0] + (self.tp[self.tp.len() - 1] - self.tp[0]) * vd; // map to [t0, tm-1];
-        let xi = interp(&self.tp.to_vec(), &X.to_vec(), ti);
+        let xi = interp(&self.tp.to_vec(), &X.to_vec(), ti, &InterpMode::default());
         let sinphi = xi.sin();
         let mut res = match &mut self.s_gen {
             SphereVariant::ForS3(gen_3) => gen_3.pop().to_vec(),
