@@ -49,9 +49,9 @@ mod tests {
 
     #[test]
     fn test_sphere_n() {
-        let mut sgen = SphereN::new(3, &PRIME_TABLE);
+        let mut sgen = SphereN::new(5, &PRIME_TABLE);
         sgen.reseed(0);
         let res = sgen.pop_vec();
-        assert_approx_eq!(res[0], 0.4809684718990214);
+        assert_approx_eq!(res[0], 0.361367435929826);
     }
 }

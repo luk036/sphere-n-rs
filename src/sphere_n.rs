@@ -4,9 +4,10 @@ use lds_rs::lds::{Sphere, VdCorput};
 use ndarray::Array1;
 use std::f64::consts::FRAC_PI_2;
 use std::f64::consts::PI; // Half of PI
-                          // use std::sync::{Mutex, MutexGuard};
-                          // use std::collections::HashMap;
-                          // use cached::proc_macro::cached;
+
+// use std::sync::{Mutex, MutexGuard};
+// use std::collections::HashMap;
+// use cached::proc_macro::cached;
 
 lazy_static! {
     static ref X: Array1<f64> = Array1::linspace(0.0, PI, 300);
