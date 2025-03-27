@@ -6,7 +6,7 @@ use std::f64::consts::FRAC_PI_2;
 use std::f64::consts::PI; // Half of PI
                           // use std::sync::{Mutex, MutexGuard};
                           // use std::collections::HashMap;
-use cached::proc_macro::cached;
+// use cached::proc_macro::cached;
 
 lazy_static! {
     static ref X: Array1<f64> = Array1::linspace(0.0, PI, 300);
@@ -45,39 +45,39 @@ lazy_static! {
     };
 }
 
-#[cached]
-fn get_tp_odd(n: u32) -> Array1<f64> {
-    if n == 1 {
-        GL.neg_cosine.clone() // Adjusted to call static method, assuming its existence
-    } else {
-        let tp_minus_2 = get_tp_odd(n - 2);
+// #[cached]
+// fn get_tp_odd(n: u32) -> Array1<f64> {
+//     if n == 1 {
+//         GL.neg_cosine.clone() // Adjusted to call static method, assuming its existence
+//     } else {
+//         let tp_minus_2 = get_tp_odd(n - 2);
 
-        (((n - 1) as f64) * &tp_minus_2
-            + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
-            / (n as f64)
-    }
-}
+//         (((n - 1) as f64) * &tp_minus_2
+//             + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
+//             / (n as f64)
+//     }
+// }
 
-#[cached]
-fn get_tp_even(n: u32) -> Array1<f64> {
-    if n == 0 {
-        GL.x.clone() // Adjusted to call static method, assuming its existence
-    } else {
-        let tp_minus_2 = get_tp_even(n - 2);
+// #[cached]
+// fn get_tp_even(n: u32) -> Array1<f64> {
+//     if n == 0 {
+//         GL.x.clone() // Adjusted to call static method, assuming its existence
+//     } else {
+//         let tp_minus_2 = get_tp_even(n - 2);
 
-        (((n - 1) as f64) * &tp_minus_2
-            + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
-            / (n as f64)
-    }
-}
+//         (((n - 1) as f64) * &tp_minus_2
+//             + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
+//             / (n as f64)
+//     }
+// }
 
-fn get_tp(n: u32) -> Array1<f64> {
-    if n % 2 == 0 {
-        get_tp_even(n)
-    } else {
-        get_tp_odd(n)
-    }
-}
+// fn get_tp(n: u32) -> Array1<f64> {
+//     if n % 2 == 0 {
+//         get_tp_even(n)
+//     } else {
+//         get_tp_odd(n)
+//     }
+// }
 
 /// The `SphereGen` trait in Rust defines a set of methods that need to be implemented by types that
 /// want to be considered as generators for spheres. Here's a breakdown of the methods defined in the
@@ -176,114 +176,6 @@ impl SphereGen for Sphere3 {
     #[inline]
     fn get_tp(&self) -> &Array1<f64> {
         &self.tp
-    }
-}
-
-/// The `NSphere` struct represents a generator for Sphere-N Low-discrepency sequence.
-///
-/// Properties:
-///
-/// * `vdc`: The `vdc` property seems to be of type `VdCorput`, which is likely used for generating
-///         Low-discrepency sequences. Low-discrepency sequences are deterministic sequences that are used for quasi-random
-///         sampling. The `VdCorput` struct probably implements the Van der Corput sequence generation algorithm.
-/// * `s_gen`: The `s_gen` property in the `NSphere` struct is a Box containing a trait object that
-///         implements the `SphereGen` trait. This allows for dynamic dispatch and the ability to store
-///         different types that implement the `SphereGen` trait in the `NSphere` struct.
-/// * `tp`: The `tp` property in the `NSphere` struct is of type `Array1<f64>`. It is used to store some
-///         data related to the sphere generation process.
-pub struct NSphere {
-    vdc: VdCorput,
-    s_gen: Box<dyn SphereGen>,
-    n: u32,
-    tp: Array1<f64>,
-}
-
-impl NSphere {
-    /// The function `new` in Rust initializes a NSphere struct with specific parameters based on the
-    /// input size and base array.
-    ///
-    /// Arguments:
-    ///
-    /// * `n`: The parameter `n` represents the dimensionality of the sphere being generated.
-    /// * `base`: The `base` parameter is a slice of `usize` values that contains the base values used
-    ///         for generating the NSphere. The function `new` takes two parameters: `n`, which is the dimension
-    ///         of the NSphere, and `base`, which is a slice containing the base values needed for
-    ///
-    /// Returns:
-    ///
-    /// The `new` function returns an instance of the `NSphere` struct.
-    pub fn new(n: u32, base: &[usize]) -> Self {
-        assert!(n >= 3);
-        let (s_gen, tp_minus2): (Box<dyn SphereGen>, Array1<f64>) = if n == 3 {
-            (Box::new(Sphere3::new(&base[1..4])), GL.neg_cosine.clone())
-        } else {
-            let s_minus1 = NSphere::new(n - 1, &base[1..]);
-            let ssn_minus2 = s_minus1.get_tp_minus1().clone();
-            (Box::new(NSphere::new(n - 1, &base[1..])), ssn_minus2)
-        };
-        let tp = (((n - 1) as f64) * tp_minus2
-            + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
-            / n as f64;
-        NSphere {
-            vdc: VdCorput::new(base[0]),
-            s_gen,
-            n,
-            tp,
-        }
-    }
-
-    /// The function `get_tp_minus1` returns a reference to an `Array1<f64>` obtained from calling the
-    /// `get_tp` method on the `s_gen` field.
-    ///
-    /// Returns:
-    ///
-    /// The `get_tp_minus1` function is returning a reference to an `Array1<f64>` which is obtained by
-    /// calling the `get_tp` method on the `s_gen` field of the struct or object that the function is
-    /// defined on.
-    #[inline]
-    pub fn get_tp_minus1(&self) -> &Array1<f64> {
-        self.s_gen.get_tp()
-    }
-}
-
-/// Generate N-Sphere Low-discrepency sequence
-///
-/// # Examples
-///
-/// ```
-/// use sphere_n_rs::NSphere;
-/// use sphere_n_rs::SphereGen;
-/// use approx_eq::assert_approx_eq;
-///
-/// let mut sgen = NSphere::new(3, &[2, 3, 5, 7]);
-/// sgen.reseed(0);
-/// let res = sgen.pop_vec();
-///
-/// assert_approx_eq!(res[0], 0.4809684718990214);
-/// ```
-impl SphereGen for NSphere {
-    #[allow(dead_code)]
-    fn reseed(&mut self, seed: usize) {
-        self.vdc.reseed(seed);
-        self.s_gen.reseed(seed);
-    }
-
-    fn get_tp(&self) -> &Array1<f64> {
-        &self.tp
-    }
-
-    fn pop_vec(&mut self) -> Vec<f64> {
-        let vd = self.vdc.pop();
-        let tp = get_tp(self.n);
-        let ti = tp[0] + (tp[tp.len() - 1] - tp[0]) * vd; // map to [t0, tm-1];
-        let xi = interp(&tp.to_vec(), &X.to_vec(), ti, &InterpMode::default());
-        let sinphi = xi.sin();
-        let mut res = self.s_gen.pop_vec();
-        for xi in res.iter_mut() {
-            *xi *= sinphi;
-        }
-        res.push(xi.cos());
-        res
     }
 }
 

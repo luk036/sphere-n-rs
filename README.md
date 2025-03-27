@@ -16,12 +16,12 @@ The library achieves this through a combination of mathematical calculations and
 1. The VdCorput sequence generator produces a sequence of numbers that are evenly distributed between 0 and 1.
 2. Subsequently, the aforementioned numerical data is mapped onto the surface of a sphere through the use of interpolation functions.
 3. The SphereGen module represents an abstract base class that defines the common interface for all sphere generators.
-4. The recursive structures, namely Sphere3 and NSphere, facilitate the construction of higher-dimensional spheres from their lower-dimensional counterparts.
+4. The recursive structures, namely Sphere3 and SphereN, facilitate the construction of higher-dimensional spheres from their lower-dimensional counterparts.
 
 The primary logic flow begins with the construction of a SphereN object, which utilizes either a Sphere3 (for three-dimensional applications) or a recursive process to generate lower-dimensional spheres for higher dimensions. In the generation of points, the VdCorput sequence is employed to obtain a fundamental number, which is then subjected to a series of transformations involving the sine, cosine, and interpolation functions. This mapping is performed in order to place the fundamental number onto the surface of the sphere.
 
 A salient feature of the library is its incorporation of caching (via the @cached attribute) and lazy initialization (through lazy_static) to augment performance by storing and reusing calculated values.
-Moreover, the library provides traits and structures that facilitate the adaptable utilization of the sphere generators. The SphereGen trait establishes a common interface for disparate sphere generators, whereas the NSphere and SphereN structures implement the actual generation logic.
+Moreover, the library provides traits and structures that facilitate the adaptable utilization of the sphere generators. The SphereGen trait establishes a common interface for disparate sphere generators, whereas the SphereN structure implements the actual generation logic.
 
 In conclusion, this library provides a sophisticated yet flexible approach to generating evenly distributed points on high-dimensional spheres, which can be advantageous in numerous scientific and computational applications.
 
