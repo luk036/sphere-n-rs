@@ -85,7 +85,7 @@ lazy_static! {
 /// `SphereGen` trait:
 pub trait SphereGen {
     // fn new(base: &[usize]) -> Self;
-    fn pop_vec(&mut self) -> Vec<f64>;
+    // fn pop_vec(&mut self) -> Vec<f64>;
     fn reseed(&mut self, seed: usize);
     fn get_tp(&self) -> &Array1<f64>;
 }
@@ -169,10 +169,10 @@ impl SphereGen for Sphere3 {
         self.sphere2.reseed(seed);
     }
 
-    #[inline]
-    fn pop_vec(&mut self) -> Vec<f64> {
-        self.pop().to_vec()
-    }
+    // #[inline]
+    // fn pop_vec(&mut self) -> Vec<f64> {
+    //     self.pop().to_vec()
+    // }
 
     #[inline]
     fn get_tp(&self) -> &Array1<f64> {
