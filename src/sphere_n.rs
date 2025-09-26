@@ -37,8 +37,6 @@ lazy_static! {
     };
 }
 
-
-
 /// The `SphereGen` trait in Rust defines a set of methods that need to be implemented by types that
 /// want to be considered as generators for spheres. Here's a breakdown of the methods defined in the
 /// `SphereGen` trait:
