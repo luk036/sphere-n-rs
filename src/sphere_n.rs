@@ -5,18 +5,9 @@ use ndarray::Array1;
 use std::f64::consts::FRAC_PI_2;
 use std::f64::consts::PI; // Half of PI
 
-// use std::sync::{Mutex, MutexGuard};
-// use std::collections::HashMap;
-// use cached::proc_macro::cached;
-
 lazy_static! {
     static ref X: Array1<f64> = Array1::linspace(0.0, PI, 300);
 }
-
-// lazy_static! {
-//     static ref CACHE_ODD: Mutex<HashMap<usize, Array1<f64>>> = Mutex::new(HashMap::new());
-//     static ref CACHE_EVEN: Mutex<HashMap<usize, Array1<f64>>> = Mutex::new(HashMap::new());
-// }
 
 /// The struct `Gl` in Rust contains three arrays of type `f64` representing `x`, `neg_cosine`, and
 /// `sine`.
@@ -46,46 +37,12 @@ lazy_static! {
     };
 }
 
-// #[cached]
-// fn get_tp_odd(n: u32) -> Array1<f64> {
-//     if n == 1 {
-//         GL.neg_cosine.clone() // Adjusted to call static method, assuming its existence
-//     } else {
-//         let tp_minus_2 = get_tp_odd(n - 2);
 
-//         (((n - 1) as f64) * &tp_minus_2
-//             + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
-//             / (n as f64)
-//     }
-// }
-
-// #[cached]
-// fn get_tp_even(n: u32) -> Array1<f64> {
-//     if n == 0 {
-//         GL.x.clone() // Adjusted to call static method, assuming its existence
-//     } else {
-//         let tp_minus_2 = get_tp_even(n - 2);
-
-//         (((n - 1) as f64) * &tp_minus_2
-//             + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
-//             / (n as f64)
-//     }
-// }
-
-// fn get_tp(n: u32) -> Array1<f64> {
-//     if n % 2 == 0 {
-//         get_tp_even(n)
-//     } else {
-//         get_tp_odd(n)
-//     }
-// }
 
 /// The `SphereGen` trait in Rust defines a set of methods that need to be implemented by types that
 /// want to be considered as generators for spheres. Here's a breakdown of the methods defined in the
 /// `SphereGen` trait:
 pub trait SphereGen {
-    // fn new(base: &[usize]) -> Self;
-    // fn pop_vec(&mut self) -> Vec<f64>;
     fn reseed(&mut self, seed: usize);
     fn get_tp(&self) -> &Array1<f64>;
 }
@@ -134,6 +91,7 @@ impl Sphere3 {
     /// based on some operations involving popping values from `self.vdc` and `self.sphere2`, and the
     /// last value is the cosine of the interpolated value `xi`. The array returned contains the values
     /// `[sinxi * s0, sinxi * s1, sinxi * s
+    #[inline]
     pub fn pop(&mut self) -> [f64; 4] {
         let ti = FRAC_PI_2 * self.vdc.pop(); // map to [0, pi];
         let xi = interp(&GL.f2.to_vec(), &X.to_vec(), ti, &InterpMode::default());
@@ -169,11 +127,6 @@ impl SphereGen for Sphere3 {
         self.sphere2.reseed(seed);
     }
 
-    // #[inline]
-    // fn pop_vec(&mut self) -> Vec<f64> {
-    //     self.pop().to_vec()
-    // }
-
     #[inline]
     fn get_tp(&self) -> &Array1<f64> {
         &self.tp
@@ -181,7 +134,6 @@ impl SphereGen for Sphere3 {
 }
 
 enum SphereVariant {
-    // ForS2(Box<Sphere>),
     ForS3(Box<Sphere3>),
     ForSn(Box<SphereN>),
 }
@@ -206,24 +158,31 @@ pub struct SphereN {
     tp: Array1<f64>,
 }
 
-// static IntSinPowerTable sp {};
 impl SphereN {
+    /// The function `new` constructs a new `SphereN` object with specified parameters.
+    ///
+    /// Arguments:
+    ///
+    /// * `n`: The `n` parameter is the dimension of the sphere.
+    /// * `base`: The `base` parameter is an array of `usize` values that contains information needed to
+    ///           initialize a `SphereN` object. It is used to create a new `SphereN` object by passing specific
+    ///           values to initialize its internal components such as `VdCorput` and `Sphere`.
+    ///
+    /// Returns:
+    ///
+    /// A new `SphereN` object is being returned from the `new` function.
     pub fn new(n: usize, base: &[usize]) -> Self {
         assert!(n >= 3);
-        let (s_gen, tp_minus2) = match n {
-            3 => (
-                SphereVariant::ForS3(Box::<Sphere3>::new(Sphere3::new(&base[1..4]))),
-                GL.neg_cosine.clone(),
-            ),
-            _ => {
-                let s_minus1 = SphereN::new(n - 1, &base[1..]);
-                let ssn_minus2 = s_minus1.get_tp_minus1().clone();
-                (
-                    SphereVariant::ForSn(Box::<SphereN>::new(s_minus1)),
-                    ssn_minus2,
-                )
-            }
+        let (s_gen, tp_minus2) = if n == 3 {
+            let s_gen = SphereVariant::ForS3(Box::new(Sphere3::new(&base[1..4])));
+            (s_gen, GL.neg_cosine.clone())
+        } else {
+            let s_minus1 = SphereN::new(n - 1, &base[1..]);
+            let ssn_minus2 = s_minus1.get_tp_minus1().clone();
+            let s_gen = SphereVariant::ForSn(Box::new(s_minus1));
+            (s_gen, ssn_minus2)
         };
+
         let tp = (((n - 1) as f64) * tp_minus2
             + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
             / n as f64;
@@ -235,18 +194,20 @@ impl SphereN {
         }
     }
 
+    #[inline]
     pub fn get_tp(&self) -> &Array1<f64> {
         &self.tp
     }
 
+    #[inline]
     pub fn get_tp_minus1(&self) -> &Array1<f64> {
         match &self.s_gen {
-            // SphereVariant::ForS2(gen_2) => { X },
             SphereVariant::ForS3(gen_3) => gen_3.get_tp(),
             SphereVariant::ForSn(gen_n) => gen_n.get_tp(),
         }
     }
 
+    #[inline]
     pub fn pop_vec(&mut self) -> Vec<f64> {
         let vd = self.vdc.pop();
         let ti = self.tp[0] + (self.tp[self.tp.len() - 1] - self.tp[0]) * vd; // map to [t0, tm-1];
@@ -263,11 +224,10 @@ impl SphereN {
         res
     }
 
-    #[allow(dead_code)]
+    #[inline]
     pub fn reseed(&mut self, seed: usize) {
         self.vdc.reseed(seed);
         match &mut self.s_gen {
-            // SphereVariant::ForS2(gen_2) => { X },
             SphereVariant::ForS3(gen_3) => gen_3.reseed(seed),
             SphereVariant::ForSn(gen_n) => gen_n.reseed(seed),
         }

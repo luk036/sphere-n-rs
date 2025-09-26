@@ -1,9 +1,6 @@
 use lds_rs::lds::{Circle, VdCorput};
-// use std::sync::{Mutex, MutexGuard};
-// use std::collections::HashMap;
 
 pub trait CylindGen {
-    // fn new(base: &[usize]) -> Self;
     fn pop_vec(&mut self) -> Vec<f64>;
     fn reseed(&mut self, seed: usize);
 }
@@ -43,11 +40,18 @@ pub struct CylindN {
 /// assert_approx_eq!(res[1], 0.032662755534715766);
 /// ```
 impl CylindN {
-    /**
-     * @brief Construct a new cylin n::cylin n object
-     *
-     */
-    #[allow(dead_code)]
+    /// The function `new` constructs a new `CylindN` object with specified parameters.
+    ///
+    /// Arguments:
+    ///
+    /// * `n`: The `n` parameter is the dimension of the cylinder.
+    /// * `base`: The `base` parameter is an array of `usize` values that contains information needed to
+    ///           initialize a `CylindN` object. It is used to create a new `CylindN` object by passing specific
+    ///           values to initialize its internal components such as `VdCorput` and `Circle`.
+    ///
+    /// Returns:
+    ///
+    /// A new `CylindN` object is being returned from the `new` function.
     pub fn new(n: usize, base: &[usize]) -> Self {
         assert!(n >= 2);
         let c_gen: Box<dyn CylindGen> = if n == 2 {
@@ -63,6 +67,7 @@ impl CylindN {
 }
 
 impl CylindGen for CylindN {
+    #[inline]
     fn pop_vec(&mut self) -> Vec<f64> {
         let cosphi = 2.0 * self.vdc.pop() - 1.0; // map to [-1, 1];
         let sinphi = (1.0 - cosphi * cosphi).sqrt();
@@ -74,6 +79,7 @@ impl CylindGen for CylindN {
         res
     }
 
+    #[inline]
     fn reseed(&mut self, seed: usize) {
         self.vdc.reseed(seed);
         self.c_gen.reseed(seed);
