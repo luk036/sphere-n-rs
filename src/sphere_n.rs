@@ -15,12 +15,12 @@ lazy_static! {
 /// Properties:
 ///
 /// * `x`: The `x` property in the `Gl` struct appears to be an array of floating-point numbers (`f64`).
-///         It seems to represent some kind of data related to the struct.
+///   It seems to represent some kind of data related to the struct.
 /// * `neg_cosine`: The `neg_cosine` property in the `Gl` struct seems to be an array of floating-point
-///         numbers (`f64`). It likely stores the negative cosine values for some calculations or processing
-///         within the struct.
+///   numbers (`f64`). It likely stores the negative cosine values for some calculations or processing
+///   within the struct.
 /// * `sine`: The `sine` property in the `Gl` struct is an `Array1<f64>` type, which likely represents
-///         an array of floating-point numbers (f64) storing the sine values.
+///   an array of floating-point numbers (f64) storing the sine values.
 struct Gl {
     x: Array1<f64>,
     neg_cosine: Array1<f64>,
@@ -51,9 +51,9 @@ pub trait SphereGen {
 ///
 /// * `vdc`: The `vdc` property in the `Sphere3` struct is of type `VdCorput`.
 /// * `sphere2`: The `sphere2` property in the `Sphere3` struct is of type `Sphere`. It seems to be a
-///         reference to another struct named `Sphere`.
+///   reference to another struct named `Sphere`.
 /// * `tp`: The `tp` property in the `Sphere3` struct is of type `Array1<f64>`, which is an array of
-///         floating-point numbers with one dimension.
+///   floating-point numbers with one dimension.
 pub struct Sphere3 {
     vdc: VdCorput,
     sphere2: Sphere,
@@ -66,8 +66,8 @@ impl Sphere3 {
     /// Arguments:
     ///
     /// * `base`: The `base` parameter is an array of `usize` values that contains information needed to
-    ///           initialize a `Sphere3` object. It is used to create a new `Sphere3` object by passing specific
-    ///           values to initialize its internal components such as `VdCorput` and `Sphere`.
+    ///   initialize a `Sphere3` object. It is used to create a new `Sphere3` object by passing specific
+    ///   values to initialize its internal components such as `VdCorput` and `Sphere`.
     ///
     /// Returns:
     ///
@@ -163,8 +163,8 @@ impl SphereN {
     ///
     /// * `n`: The `n` parameter is the dimension of the sphere.
     /// * `base`: The `base` parameter is an array of `usize` values that contains information needed to
-    ///           initialize a `SphereN` object. It is used to create a new `SphereN` object by passing specific
-    ///           values to initialize its internal components such as `VdCorput` and `Sphere`.
+    ///   initialize a `SphereN` object. It is used to create a new `SphereN` object by passing specific
+    ///   values to initialize its internal components such as `VdCorput` and `Sphere`.
     ///
     /// Returns:
     ///

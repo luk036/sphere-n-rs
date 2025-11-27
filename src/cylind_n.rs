@@ -46,8 +46,8 @@ impl CylindN {
     ///
     /// * `n`: The `n` parameter is the dimension of the cylinder.
     /// * `base`: The `base` parameter is an array of `usize` values that contains information needed to
-    ///           initialize a `CylindN` object. It is used to create a new `CylindN` object by passing specific
-    ///           values to initialize its internal components such as `VdCorput` and `Circle`.
+    ///   initialize a `CylindN` object. It is used to create a new `CylindN` object by passing specific
+    ///   values to initialize its internal components such as `VdCorput` and `Circle`.
     ///
     /// Returns:
     ///
