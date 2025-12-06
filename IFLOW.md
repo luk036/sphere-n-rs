@@ -2,9 +2,9 @@
 
 ## 项目概述
 
-**项目名称**: sphere-n-rs  
-**项目类型**: Rust 库  
-**主要功能**: 生成 n 维球面上的低差异序列 (Low Discrepancy Sequence)  
+**项目名称**: sphere-n-rs
+**项目类型**: Rust 库
+**主要功能**: 生成 n 维球面上的低差异序列 (Low Discrepancy Sequence)
 **领域**: 数值计算、蒙特卡洛模拟、计算机图形学
 
 这是一个 Rust 库，用于在 n 维球面上生成均匀分布的点序列。它通过数学计算和递归结构实现，利用 VdCorput 序列生成器将数字映射到球面。
