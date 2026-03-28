@@ -1,9 +1,9 @@
 extern crate lazy_static;
 use lazy_static::lazy_static;
+use lds_rs::lds::{Circle, Sphere, VdCorput};
 use std::collections::HashMap;
 use std::f64::consts::PI;
 use std::sync::Mutex;
-use lds_rs::lds::{Circle, Sphere, VdCorput};
 
 lazy_static! {
     static ref CACHE_ODD: Mutex<HashMap<i32, Vec<f64>>> = Mutex::new(HashMap::new());
@@ -12,6 +12,8 @@ lazy_static! {
 
 const N_POINTS: usize = 300;
 
+/// Precomputed lookup tables for sphere point generation.
+/// Contains arrays for x values, negative cosine values, and sine values.
 pub struct Globals {
     pub x: Vec<f64>,
     pub neg_cosine: Vec<f64>,
@@ -19,6 +21,7 @@ pub struct Globals {
 }
 
 impl Globals {
+    /// Creates a new Globals instance with precomputed values from 0 to PI.
     fn new() -> Self {
         let mut x = vec![0.0; N_POINTS];
         let mut neg_cosine = vec![0.0; N_POINTS];
@@ -43,6 +46,7 @@ lazy_static! {
     static ref GL: Globals = Globals::new();
 }
 
+/// Computes interpolation points for odd-dimensional spheres (cached).
 fn get_tp_odd(n: i32) -> Vec<f64> {
     let mut cache_odd = CACHE_ODD.lock().unwrap();
     if let Some(result) = cache_odd.get(&n) {
@@ -66,6 +70,7 @@ fn get_tp_odd(n: i32) -> Vec<f64> {
     cache_odd.get(&n).unwrap().clone()
 }
 
+/// Computes interpolation points for even-dimensional spheres (cached).
 fn get_tp_even(n: i32) -> Vec<f64> {
     let mut cache_even = CACHE_EVEN.lock().unwrap();
     if let Some(result) = cache_even.get(&n) {
@@ -89,6 +94,8 @@ fn get_tp_even(n: i32) -> Vec<f64> {
     cache_even.get(&n).unwrap().clone()
 }
 
+/// Computes interpolation points for n-dimensional spheres.
+/// Dispatches to get_tp_odd or get_tp_even based on n.
 fn get_tp(n: i32) -> Vec<f64> {
     if n % 2 == 0 {
         get_tp_even(n)
@@ -97,26 +104,32 @@ fn get_tp(n: i32) -> Vec<f64> {
     }
 }
 
+/// 3D sphere generator using low-discrepancy sequences.
 pub struct Sphere3 {
     vdc: VdCorput,
     sphere2: Sphere,
 }
+
+/// N-dimensional sphere generator using low-discrepancy sequences.
 pub struct SphereN {
     n: usize,
     vdc: VdCorput,
     s_gen: SphereVariant,
 }
+/// Internal enum for recursive sphere generation.
 pub enum SphereVariant {
     Sphere3(Box<Sphere3>),
     SphereN(Box<SphereN>),
 }
 impl Sphere3 {
+    /// Creates a new 3D sphere generator.
     pub fn new(base: &[usize]) -> Self {
         Sphere3 {
             vdc: VdCorput,
             sphere2: Sphere::new(&base[1..3]),
         }
     }
+    /// Generates the next point on the 3D sphere.
     pub fn pop(&self) -> [f64; 4] {
         let ti = 0.5 * PI * self.vdc.pop(); // Assuming implementation for vdc.pop()
         let tp = GL.get_tp(3).expect("Failed to get TP");
@@ -128,6 +141,7 @@ impl Sphere3 {
     }
 }
 impl SphereN {
+    /// Creates a new N-dimensional sphere generator.
     pub fn new(base: &[usize]) -> Self {
         let m = base.len();
         assert!(m >= 4, "Base size must be at least 4");
@@ -142,6 +156,7 @@ impl SphereN {
             s_gen,
         }
     }
+    /// Generates the next point on the N-dimensional sphere.
     pub fn pop(&self) -> Vec<f64> {
         let vd = self.vdc.pop(); // Assuming implementation for vdc.pop()
         let tp = GL.get_tp(self.n).expect("Failed to get TP");
@@ -151,8 +166,11 @@ impl SphereN {
         match &self.s_gen {
             SphereVariant::Sphere3(sphere3) => {
                 let arr: [f64; 4] = sphere3.pop();
-                arr.into_iter().map(|x| x * sinphi).chain(std::iter::once(xi.cos())).collect()
-            },
+                arr.into_iter()
+                    .map(|x| x * sinphi)
+                    .chain(std::iter::once(xi.cos()))
+                    .collect()
+            }
             SphereVariant::SphereN(sphere_n) => {
                 let mut res = sphere_n.pop();
                 for elem in res.iter_mut() {
@@ -160,14 +178,14 @@ impl SphereN {
                 }
                 res.push(xi.cos());
                 res
-            },
+            }
         }
     }
 }
 
+/// Linear interpolation function.
 fn interp(x: &[f64], x_ref: &[f64], val: f64) -> f64 {
     // Implement the interp function according to Rust's conventions.
     // Placeholder for now.
     unimplemented!()
 }
-

@@ -1,5 +1,7 @@
 use lds_rs::lds::{Circle, VdCorput};
 
+/// Trait for cylindrical coordinate generators.
+/// Implementors provide methods to generate points using cylindrical coordinates.
 pub trait CylindGen {
     fn pop_vec(&mut self) -> Vec<f64>;
     fn reseed(&mut self, seed: usize);
@@ -67,6 +69,7 @@ impl CylindN {
 }
 
 impl CylindGen for CylindN {
+    /// Generates the next point on the n-dimensional cylinder.
     #[inline]
     fn pop_vec(&mut self) -> Vec<f64> {
         let cosphi = 2.0 * self.vdc.pop() - 1.0; // map to [-1, 1];
@@ -79,6 +82,7 @@ impl CylindGen for CylindN {
         res
     }
 
+    /// Reseeds the underlying generators with the given seed.
     #[inline]
     fn reseed(&mut self, seed: usize) {
         self.vdc.reseed(seed);

@@ -192,11 +192,13 @@ impl SphereN {
         }
     }
 
+    /// Returns a reference to the precomputed interpolation points.
     #[inline]
     pub fn get_tp(&self) -> &Array1<f64> {
         &self.tp
     }
 
+    /// Returns a reference to the precomputed interpolation points from the underlying sphere generator.
     #[inline]
     pub fn get_tp_minus1(&self) -> &Array1<f64> {
         match &self.s_gen {
@@ -205,6 +207,9 @@ impl SphereN {
         }
     }
 
+    /// Generates the next point on the n-dimensional sphere as a vector.
+    ///
+    /// Returns a vector of length n+1 representing a point on the n-dimensional sphere.
     #[inline]
     pub fn pop_vec(&mut self) -> Vec<f64> {
         let vd = self.vdc.pop();
@@ -222,6 +227,7 @@ impl SphereN {
         res
     }
 
+    /// Reseeds the random number generators with a new seed.
     #[inline]
     pub fn reseed(&mut self, seed: usize) {
         self.vdc.reseed(seed);
