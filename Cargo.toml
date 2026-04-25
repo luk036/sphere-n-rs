@@ -6,18 +6,16 @@ description = "N-Sphere Code Generation in Rust"
 repository = "https://github.com/luk036/sphere-n-rs"
 license = "MIT OR Apache-2.0"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 ndarray = "0.16.1"
 lazy_static = "1.5.0"
 interp = "2.1.1"
 lds-rs = "0.1.6"
-cached = "0.56.0"
-# nd-triangulation = "0.3.4"
-# nalgebra = "0.32.6"
-# convex_hull = "0.2.3"
-# lds-rs = { git = "https://github.com/luk036/lds-rs" }
 
 [dev-dependencies]
 approx_eq = "0.1.8"
+criterion = "0.5"
+
+[[bench]]
+name = "sphere_bench"
+harness = false

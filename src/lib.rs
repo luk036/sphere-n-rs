@@ -4,6 +4,8 @@ pub mod sphere_n;
 pub use crate::cylind_n::{CylindGen, CylindN};
 pub use crate::sphere_n::{Sphere3, SphereGen, SphereN};
 
+pub use lds_rs::lds::PRIME_TABLE;
+
 #[cfg(test)]
 mod tests {
     use super::cylind_n::*;
@@ -95,5 +97,33 @@ mod tests {
         let res = cgen.pop_vec();
         assert_approx_eq!(res[0], -0.5);
         assert_approx_eq!(res[1], 0.8660254037844387);
+    }
+
+    #[test]
+    fn test_discrepancy_cylind2d() {
+        let mut cgen = CylindN::new(2, &PRIME_TABLE);
+        cgen.reseed(0);
+        let n = 10000;
+        let mut sectors = [0usize; 8];
+        for _i in 0..n {
+            let pt = cgen.pop_vec();
+            let angle = pt[0].atan2(pt[1]);
+            let bin =
+                ((angle + std::f64::consts::PI) / (std::f64::consts::PI * 2.0) * 8.0) as usize;
+            sectors[bin.min(7)] += 1;
+        }
+        let expected = n / 8;
+        let max_dev = sectors
+            .iter()
+            .map(|&c| (c as i64 - expected as i64).abs())
+            .max()
+            .unwrap();
+        let ratio = max_dev as f64 / expected as f64;
+        assert!(
+            ratio < 0.3,
+            "max_deviation {} exceeds 30% of expected {}",
+            max_dev,
+            expected
+        );
     }
 }
