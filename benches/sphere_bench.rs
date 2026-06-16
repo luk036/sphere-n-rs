@@ -1,4 +1,6 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use std::hint::black_box;
+
+use criterion::{criterion_group, criterion_main, Criterion};
 use lds_rs::lds::PRIME_TABLE;
 use sphere_n_rs::{CylindGen, CylindN, SphereN};
 
