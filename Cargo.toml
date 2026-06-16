@@ -7,14 +7,14 @@ repository = "https://github.com/luk036/sphere-n-rs"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-ndarray = "0.16.1"
+ndarray = "0.17.2"
 lazy_static = "1.5.0"
-interp = "2.1.1"
+interp = "2.1.2"
 lds-rs = "0.1.6"
 
 [dev-dependencies]
 approx_eq = "0.1.8"
-criterion = "0.5"
+criterion = "0.8.2"
 
 [[bench]]
 name = "sphere_bench"
