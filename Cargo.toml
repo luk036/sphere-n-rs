@@ -1,6 +1,6 @@
 [package]
 name = "sphere-n-rs"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 description = "N-Sphere Code Generation in Rust"
 repository = "https://github.com/luk036/sphere-n-rs"
