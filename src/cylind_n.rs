@@ -70,6 +70,8 @@ impl CylindN {
 
 impl CylindGen for CylindN {
     /// Generates the next point on the n-dimensional cylinder.
+    ///
+    /// $$ \phi = 2v - 1, \quad (\sqrt{1-\phi^2} \cdot \mathbf{s},\; \phi) $$
     #[inline]
     fn pop_vec(&mut self) -> Vec<f64> {
         let cosphi = 2.0 * self.vdc.pop() - 1.0; // map to [-1, 1];

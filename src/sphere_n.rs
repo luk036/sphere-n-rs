@@ -83,6 +83,8 @@ impl Sphere3 {
 
     /// The `pop` function in Rust calculates values based on input data and returns a 4-element array.
     ///
+    /// $$ \theta = \frac{\pi}{2} v, \quad \chi = F_2^{-1}(\theta), \quad (\sin\chi \cdot \mathbf{s},\; \cos\chi) $$
+    ///
     /// Returns:
     ///
     /// The function `pop` returns an array of 4 `f64` values. The first three values are calculated
@@ -208,6 +210,8 @@ impl SphereN {
     }
 
     /// Generates the next point on the n-dimensional sphere as a vector.
+    ///
+    /// $$ \theta = v, \quad \chi = T_n^{-1}(\theta), \quad (\sin\chi \cdot \mathbf{s}_{n-2},\; \cos\chi) $$
     ///
     /// Returns a vector of length n+1 representing a point on the n-dimensional sphere.
     #[inline]
