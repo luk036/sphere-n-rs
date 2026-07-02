@@ -17,7 +17,21 @@ impl CylindGen for Circle {
     }
 }
 
-/** Generate using cylindrical coordinate method */
+/** Generate using cylindrical coordinate method
+ *
+ * Each point on $$ S^{n-1} $$ is generated via:
+ * $$ (\sqrt{1-\phi^2} \cdot \mathbf{s}_{n-2},\; \phi) $$ */
+#[cfg_attr(feature = "doc-images", doc = svgbobdoc::transform!(
+/// ```svgbob
+///  .───────────.    .───────────────.
+///  │ LDS φ    │───►│  ϕ = 2v - 1   │
+///  '───────────'    '───────┬───────'
+///                           │
+///  .───────────.    .───────▼───────.
+///  │ LDS s    │───►│ (√(1-ϕ²)·s,ϕ) │
+///  '───────────'    '───────────────'
+/// ```
+))]
 pub struct CylindN {
     vdc: VdCorput,
     c_gen: Box<dyn CylindGen>,

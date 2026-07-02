@@ -47,6 +47,9 @@ pub trait SphereGen {
 
 /// The `Sphere3` struct in Rust contains fields for VdCorput, Sphere, and an `Array1<f64>`.
 ///
+/// The 3-sphere $$ S^3 $$ (surface of a unit ball in $$ \mathbb{R}^4 $$) has surface area:
+/// $$ S_3(r) = 2\pi^2 r^3 $$
+///
 /// Properties:
 ///
 /// * `vdc`: The `vdc` property in the `Sphere3` struct is of type `VdCorput`.
@@ -54,6 +57,22 @@ pub trait SphereGen {
 ///   reference to another struct named `Sphere`.
 /// * `tp`: The `tp` property in the `Sphere3` struct is of type `Array1<f64>`, which is an array of
 ///   floating-point numbers with one dimension.
+#[cfg_attr(feature = "doc-images", doc = svgbobdoc::transform!(
+/// ```svgbob
+///  .───────────────.    .───────────────.
+///  │ VdCorput(2)  │───►│  θ = 2π·φ     │
+///  '───────────────'    '───────┬───────'
+///                               │
+///  .───────────────.    .───────▼───────.
+///  │ VdCorput(3)  │───►│  χ = F₂⁻¹(θ) │
+///  '───────────────'    '───────┬───────'
+///                               │
+///                       .───────▼───────.
+///                       │  (sinχ·s,     │
+///                       │   cosχ)       │
+///                       '───────────────'
+/// ```
+))]
 pub struct Sphere3 {
     vdc: VdCorput,
     sphere2: Sphere,
@@ -140,6 +159,11 @@ enum SphereVariant {
 
 /// Generate N-Sphere Low-discrepency sequence
 ///
+/// The $$ (n-1) $$-sphere surface area and n-ball volume are:
+///
+/// $$ S_{n-1}(r) = \frac{2\pi^{n/2} r^{n-1}}{\Gamma(n/2)},\qquad
+///    V_n(r) = \frac{\pi^{n/2} r^n}{\Gamma(n/2 + 1)} $$
+///
 /// # Examples
 ///
 /// ```
@@ -152,6 +176,15 @@ enum SphereVariant {
 ///
 /// assert_approx_eq!(res[0], 0.4809684718990214);
 /// ```
+#[cfg_attr(feature = "doc-images", doc = svgbobdoc::transform!(
+/// ```svgbob
+///  .───────────.    .───────────.    .──────────────.
+///  │ LDS Seq  │───►│  θn = Tn  │───►│  S^(n-1)     │
+///  │ (n dims) │    │  (θ)      │    │  point on    │
+///  '───────────'    '───────────'    │  n-sphere    │
+///                                    '──────────────'
+/// ```
+))]
 pub struct SphereN {
     vdc: VdCorput,
     s_gen: SphereVariant,
