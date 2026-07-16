@@ -1,6 +1,6 @@
 use interp::{interp, InterpMode};
 use lazy_static::lazy_static;
-use lds_rs::lds::{Sphere, VdCorput};
+use lds_rs::{Sphere, VdCorput};
 use ndarray::Array1;
 use std::f64::consts::FRAC_PI_2;
 use std::f64::consts::PI; // Half of PI
@@ -41,7 +41,7 @@ lazy_static! {
 /// want to be considered as generators for spheres. Here's a breakdown of the methods defined in the
 /// `SphereGen` trait:
 pub trait SphereGen {
-    fn reseed(&mut self, seed: usize);
+    fn reseed(&mut self, seed: u64);
     fn get_tp(&self) -> &Array1<f64>;
 }
 
@@ -91,10 +91,10 @@ impl Sphere3 {
     /// Returns:
     ///
     /// A new `Sphere3` object is being returned from the `new` function.
-    pub fn new(base: &[usize]) -> Self {
+    pub fn new(base: &[u64]) -> Self {
         Sphere3 {
             vdc: VdCorput::new(base[0]),
-            sphere2: Sphere::new(&base[1..3]),
+            sphere2: Sphere::new([base[1], base[2]]),
             // tp: 0.5 * (X.mapv(|x| x) - SINE.mapv(|x| x) + NEG_COSINE.mapv(|x| x)),
             tp: 0.5 * (&GL.x + &GL.sine * &GL.neg_cosine),
         }
@@ -141,7 +141,7 @@ impl Sphere3 {
 /// ```
 impl SphereGen for Sphere3 {
     #[inline]
-    fn reseed(&mut self, seed: usize) {
+    fn reseed(&mut self, seed: u64) {
         self.vdc.reseed(seed);
         self.sphere2.reseed(seed);
     }
@@ -204,7 +204,7 @@ impl SphereN {
     /// Returns:
     ///
     /// A new `SphereN` object is being returned from the `new` function.
-    pub fn new(n: usize, base: &[usize]) -> Self {
+    pub fn new(n: usize, base: &[u64]) -> Self {
         assert!(n >= 3);
         let (s_gen, tp_minus2) = if n == 3 {
             let s_gen = SphereVariant::ForS3(Box::new(Sphere3::new(&base[1..4])));
@@ -266,7 +266,7 @@ impl SphereN {
 
     /// Reseeds the random number generators with a new seed.
     #[inline]
-    pub fn reseed(&mut self, seed: usize) {
+    pub fn reseed(&mut self, seed: u64) {
         self.vdc.reseed(seed);
         match &mut self.s_gen {
             SphereVariant::ForS3(gen_3) => gen_3.reseed(seed),

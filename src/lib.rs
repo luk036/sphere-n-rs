@@ -4,7 +4,7 @@ pub mod sphere_n;
 pub use crate::cylind_n::{CylindGen, CylindN};
 pub use crate::sphere_n::{Sphere3, SphereGen, SphereN};
 
-pub use lds_rs::lds::PRIME_TABLE;
+pub use lds_rs::PRIME_TABLE;
 
 #[cfg(test)]
 mod tests {
@@ -12,11 +12,11 @@ mod tests {
     use super::sphere_n::*;
     use approx_eq::assert_approx_eq;
 
-    use lds_rs::lds::PRIME_TABLE;
+    use lds_rs::PRIME_TABLE;
 
     #[test]
     fn test_sphere3() {
-        let base: [usize; 5] = [2, 3, 5, 7, 11];
+        let base: [u64; 5] = [2, 3, 5, 7, 11];
 
         let mut sgen = Sphere3::new(&base);
         sgen.reseed(10);

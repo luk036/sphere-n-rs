@@ -1,10 +1,10 @@
-use lds_rs::lds::{Circle, VdCorput};
+use lds_rs::{Circle, VdCorput};
 
 /// Trait for cylindrical coordinate generators.
 /// Implementors provide methods to generate points using cylindrical coordinates.
 pub trait CylindGen {
     fn pop_vec(&mut self) -> Vec<f64>;
-    fn reseed(&mut self, seed: usize);
+    fn reseed(&mut self, seed: u64);
 }
 
 impl CylindGen for Circle {
@@ -12,7 +12,7 @@ impl CylindGen for Circle {
         self.pop().to_vec()
     }
 
-    fn reseed(&mut self, seed: usize) {
+    fn reseed(&mut self, seed: u64) {
         self.reseed(seed);
     }
 }
@@ -68,7 +68,7 @@ impl CylindN {
     /// Returns:
     ///
     /// A new `CylindN` object is being returned from the `new` function.
-    pub fn new(n: usize, base: &[usize]) -> Self {
+    pub fn new(n: usize, base: &[u64]) -> Self {
         assert!(n >= 2);
         let c_gen: Box<dyn CylindGen> = if n == 2 {
             Box::new(Circle::new(base[1]))
@@ -100,7 +100,7 @@ impl CylindGen for CylindN {
 
     /// Reseeds the underlying generators with the given seed.
     #[inline]
-    fn reseed(&mut self, seed: usize) {
+    fn reseed(&mut self, seed: u64) {
         self.vdc.reseed(seed);
         self.c_gen.reseed(seed);
     }
