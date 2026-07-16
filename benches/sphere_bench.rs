@@ -1,7 +1,7 @@
 use std::hint::black_box;
 
 use criterion::{criterion_group, criterion_main, Criterion};
-use lds_rs::lds::PRIME_TABLE;
+use lds_rs::PRIME_TABLE;
 use sphere_n_rs::{CylindGen, CylindN, SphereN};
 
 fn bench_sphere3(c: &mut Criterion) {
