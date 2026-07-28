@@ -88,7 +88,7 @@ impl CylindGen for CylindN {
     /// $$ \phi = 2v - 1, \quad (\sqrt{1-\phi^2} \cdot \mathbf{s},\; \phi) $$
     #[inline]
     fn pop_vec(&mut self) -> Vec<f64> {
-        let cosphi = 2.0 * self.vdc.pop() - 1.0; // map to [-1, 1];
+        let cosphi = 2.0 * self.vdc.pop() - 1.0;
         let sinphi = (1.0 - cosphi * cosphi).sqrt();
         let mut res = self.c_gen.pop_vec();
         for xi in res.iter_mut() {

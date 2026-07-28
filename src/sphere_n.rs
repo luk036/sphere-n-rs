@@ -3,24 +3,13 @@ use lazy_static::lazy_static;
 use lds_rs::{Sphere, VdCorput};
 use ndarray::Array1;
 use std::f64::consts::FRAC_PI_2;
-use std::f64::consts::PI; // Half of PI
+use std::f64::consts::PI;
 
 lazy_static! {
     static ref X: Array1<f64> = Array1::linspace(0.0, PI, 300);
 }
 
-/// The struct `Gl` in Rust contains three arrays of type `f64` representing `x`, `neg_cosine`, and
-/// `sine`.
-///
-/// Properties:
-///
-/// * `x`: The `x` property in the `Gl` struct appears to be an array of floating-point numbers (`f64`).
-///   It seems to represent some kind of data related to the struct.
-/// * `neg_cosine`: The `neg_cosine` property in the `Gl` struct seems to be an array of floating-point
-///   numbers (`f64`). It likely stores the negative cosine values for some calculations or processing
-///   within the struct.
-/// * `sine`: The `sine` property in the `Gl` struct is an `Array1<f64>` type, which likely represents
-///   an array of floating-point numbers (f64) storing the sine values.
+/// Lookup table for trigonometric interpolation.
 struct Gl {
     x: Array1<f64>,
     neg_cosine: Array1<f64>,
@@ -37,26 +26,15 @@ lazy_static! {
     };
 }
 
-/// The `SphereGen` trait in Rust defines a set of methods that need to be implemented by types that
-/// want to be considered as generators for spheres. Here's a breakdown of the methods defined in the
-/// `SphereGen` trait:
+/// Trait for sphere point generators.
 pub trait SphereGen {
     fn reseed(&mut self, seed: u64);
     fn get_tp(&self) -> &Array1<f64>;
 }
 
-/// The `Sphere3` struct in Rust contains fields for VdCorput, Sphere, and an `Array1<f64>`.
+/// 3-sphere $$ S^3 $$ (surface of a unit ball in $$ \mathbb{R}^4 $$) generator.
 ///
-/// The 3-sphere $$ S^3 $$ (surface of a unit ball in $$ \mathbb{R}^4 $$) has surface area:
-/// $$ S_3(r) = 2\pi^2 r^3 $$
-///
-/// Properties:
-///
-/// * `vdc`: The `vdc` property in the `Sphere3` struct is of type `VdCorput`.
-/// * `sphere2`: The `sphere2` property in the `Sphere3` struct is of type `Sphere`. It seems to be a
-///   reference to another struct named `Sphere`.
-/// * `tp`: The `tp` property in the `Sphere3` struct is of type `Array1<f64>`, which is an array of
-///   floating-point numbers with one dimension.
+/// Surface area: $$ S_3(r) = 2\pi^2 r^3 $$
 #[cfg_attr(feature = "doc-images", doc = svgbobdoc::transform!(
 /// ```svgbob
 ///  .───────────────.    .───────────────.
@@ -80,36 +58,18 @@ pub struct Sphere3 {
 }
 
 impl Sphere3 {
-    /// The function `new` constructs a new `Sphere3` object with specified parameters.
-    ///
-    /// Arguments:
-    ///
-    /// * `base`: The `base` parameter is an array of `usize` values that contains information needed to
-    ///   initialize a `Sphere3` object. It is used to create a new `Sphere3` object by passing specific
-    ///   values to initialize its internal components such as `VdCorput` and `Sphere`.
-    ///
-    /// Returns:
-    ///
-    /// A new `Sphere3` object is being returned from the `new` function.
+    /// Creates a new `Sphere3` generator from base indices for the low-discrepancy sequences.
     pub fn new(base: &[u64]) -> Self {
         Sphere3 {
             vdc: VdCorput::new(base[0]),
             sphere2: Sphere::new([base[1], base[2]]),
-            // tp: 0.5 * (X.mapv(|x| x) - SINE.mapv(|x| x) + NEG_COSINE.mapv(|x| x)),
             tp: 0.5 * (&GL.x + &GL.sine * &GL.neg_cosine),
         }
     }
 
-    /// The `pop` function in Rust calculates values based on input data and returns a 4-element array.
+    /// Generates the next point on the 3-sphere.
     ///
     /// $$ \theta = \frac{\pi}{2} v, \quad \chi = F_2^{-1}(\theta), \quad (\sin\chi \cdot \mathbf{s},\; \cos\chi) $$
-    ///
-    /// Returns:
-    ///
-    /// The function `pop` returns an array of 4 `f64` values. The first three values are calculated
-    /// based on some operations involving popping values from `self.vdc` and `self.sphere2`, and the
-    /// last value is the cosine of the interpolated value `xi`. The array returned contains the values
-    /// `[sinxi * s0, sinxi * s1, sinxi * s
     #[inline]
     pub fn pop(&mut self) -> [f64; 4] {
         let ti = FRAC_PI_2 * self.vdc.pop(); // map to [0, pi];
@@ -192,18 +152,7 @@ pub struct SphereN {
 }
 
 impl SphereN {
-    /// The function `new` constructs a new `SphereN` object with specified parameters.
-    ///
-    /// Arguments:
-    ///
-    /// * `n`: The `n` parameter is the dimension of the sphere.
-    /// * `base`: The `base` parameter is an array of `usize` values that contains information needed to
-    ///   initialize a `SphereN` object. It is used to create a new `SphereN` object by passing specific
-    ///   values to initialize its internal components such as `VdCorput` and `Sphere`.
-    ///
-    /// Returns:
-    ///
-    /// A new `SphereN` object is being returned from the `new` function.
+    /// Creates a new n-sphere generator with the given dimension and base indices for low-discrepancy sequences.
     pub fn new(n: usize, base: &[u64]) -> Self {
         assert!(n >= 3);
         let (s_gen, tp_minus2) = if n == 3 {
