@@ -390,7 +390,9 @@ checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
 
 [[package]]
 name = "lds-rs"
-version = "0.1.9"
+version = "0.1.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b07ba151c127415830e3a448214d7df793879e9ea877b28e190583b926bb7973"
 
 [[package]]
 name = "libc"
@@ -931,7 +933,7 @@ checksum = "8ed6a63f02c8539c91a8685a86f4099661ba3da017932f6ebbea6de3f0fa7c90"
 
 [[package]]
 name = "sphere-n-rs"
-version = "0.1.7"
+version = "0.1.8"
 dependencies = [
  "approx_eq",
  "criterion",
