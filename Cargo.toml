@@ -2,13 +2,13 @@
 name = "sphere-n-rs"
 version = "0.1.7"
 edition = "2021"
+rust-version = "1.70"
 description = "N-Sphere Code Generation in Rust"
 repository = "https://github.com/luk036/sphere-n-rs"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
 ndarray = "0.17.2"
-lazy_static = "1.5.0"
 interp = "2.1.2"
 lds-rs = { version = "0.1.9", package = "lds-gen" }
 svgbobdoc = { version = "0.3", optional = true, features = ["enable"] }

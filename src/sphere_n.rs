@@ -1,12 +1,13 @@
 use interp::{interp, InterpMode};
-use lazy_static::lazy_static;
 use lds_rs::{Sphere, VdCorput};
 use ndarray::Array1;
 use std::f64::consts::FRAC_PI_2;
 use std::f64::consts::PI;
+use std::sync::OnceLock;
 
-lazy_static! {
-    static ref X: Array1<f64> = Array1::linspace(0.0, PI, 300);
+fn x_table() -> &'static Array1<f64> {
+    static X: OnceLock<Array1<f64>> = OnceLock::new();
+    X.get_or_init(|| Array1::linspace(0.0, PI, 300))
 }
 
 /// Lookup table for trigonometric interpolation.
@@ -17,13 +18,14 @@ struct Gl {
     f2: Array1<f64>,
 }
 
-lazy_static! {
-    static ref GL: Gl = Gl {
-        x: X.clone(),
-        neg_cosine: -X.mapv(f64::cos),
-        sine: X.mapv(f64::sin),
-        f2: X.mapv(|x| (x - x.cos() * x.sin()) / 2.0),
-    };
+fn gl_table() -> &'static Gl {
+    static GL: OnceLock<Gl> = OnceLock::new();
+    GL.get_or_init(|| Gl {
+        x: x_table().clone(),
+        neg_cosine: -x_table().mapv(f64::cos),
+        sine: x_table().mapv(f64::sin),
+        f2: x_table().mapv(|x| (x - x.cos() * x.sin()) / 2.0),
+    })
 }
 
 /// Trait for sphere point generators.
@@ -63,7 +65,7 @@ impl Sphere3 {
         Sphere3 {
             vdc: VdCorput::new(base[0]),
             sphere2: Sphere::new([base[1], base[2]]),
-            tp: 0.5 * (&GL.x + &GL.sine * &GL.neg_cosine),
+            tp: 0.5 * (&gl_table().x + &gl_table().sine * &gl_table().neg_cosine),
         }
     }
 
@@ -73,7 +75,7 @@ impl Sphere3 {
     #[inline]
     pub fn pop(&mut self) -> [f64; 4] {
         let ti = FRAC_PI_2 * self.vdc.pop(); // map to [0, pi];
-        let xi = interp(&GL.f2.to_vec(), &X.to_vec(), ti, &InterpMode::default());
+        let xi = interp(&gl_table().f2.to_vec(), &x_table().to_vec(), ti, &InterpMode::default());
         let cosxi = xi.cos();
         let sinxi = xi.sin();
         let [s0, s1, s2] = self.sphere2.pop();
@@ -157,7 +159,7 @@ impl SphereN {
         assert!(n >= 3);
         let (s_gen, tp_minus2) = if n == 3 {
             let s_gen = SphereVariant::ForS3(Box::new(Sphere3::new(&base[1..4])));
-            (s_gen, GL.neg_cosine.clone())
+            (s_gen, gl_table().neg_cosine.clone())
         } else {
             let s_minus1 = SphereN::new(n - 1, &base[1..]);
             let ssn_minus2 = s_minus1.get_tp_minus1().clone();
@@ -166,7 +168,7 @@ impl SphereN {
         };
 
         let tp = (((n - 1) as f64) * tp_minus2
-            + &GL.neg_cosine * &GL.sine.mapv(|x| x.powi((n - 1) as i32)))
+            + &gl_table().neg_cosine * &gl_table().sine.mapv(|x| x.powi((n - 1) as i32)))
             / n as f64;
 
         SphereN {
@@ -200,7 +202,7 @@ impl SphereN {
     pub fn pop_vec(&mut self) -> Vec<f64> {
         let vd = self.vdc.pop();
         let ti = self.tp[0] + (self.tp[self.tp.len() - 1] - self.tp[0]) * vd; // map to [t0, tm-1];
-        let xi = interp(&self.tp.to_vec(), &X.to_vec(), ti, &InterpMode::default());
+        let xi = interp(&self.tp.to_vec(), &x_table().to_vec(), ti, &InterpMode::default());
         let sinphi = xi.sin();
         let mut res = match &mut self.s_gen {
             SphereVariant::ForS3(gen_3) => gen_3.pop().to_vec(),

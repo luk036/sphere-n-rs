@@ -938,7 +938,6 @@ dependencies = [
  "approx_eq",
  "criterion",
  "interp",
- "lazy_static",
  "lds-gen",
  "ndarray",
  "svgbobdoc",
