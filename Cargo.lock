@@ -389,10 +389,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
 
 [[package]]
-name = "lds-gen"
+name = "lds-rs"
 version = "0.1.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62d869ab0fc64f2a6d7f474c1d633702bd2f36eb8e956b7d59da2ec8bf1a01a1"
 
 [[package]]
 name = "libc"
@@ -938,7 +936,7 @@ dependencies = [
  "approx_eq",
  "criterion",
  "interp",
- "lds-gen",
+ "lds-rs",
  "ndarray",
  "svgbobdoc",
 ]
