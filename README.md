@@ -29,9 +29,12 @@ In conclusion, this library provides a sophisticated yet flexible approach to ge
 
 ### 📦 Cargo
 
-- Install the rust toolchain in order to have cargo installed by following
-  [this](https://www.rust-lang.org/tools/install) guide.
-- run `cargo install sphere-n-rs`
+Add this to your `Cargo.toml`:
+
+```toml
+[dependencies]
+sphere-n-rs = "0.1"
+```
 
 ## 📜 License
 
