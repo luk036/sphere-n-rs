@@ -8,10 +8,12 @@ pub trait CylindGen {
 }
 
 impl CylindGen for Circle {
+    #[inline]
     fn pop_vec(&mut self) -> Vec<f64> {
         self.pop().to_vec()
     }
 
+    #[inline]
     fn reseed(&mut self, seed: u64) {
         self.reseed(seed);
     }
